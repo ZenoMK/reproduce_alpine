@@ -155,5 +155,7 @@ for i in tqdm(range(10)):
             if(symbol != ""):
                 wrong = wrong + 1
             f.write(item +" " + symbol + '\n')
+        f.write(f"Number of wrongs: {wrong}")
+
 
 
