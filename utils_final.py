@@ -403,7 +403,7 @@ class AttentionVisualizer:
                         raise TypeError(f"Unexpected attention weight type: {type(attn_layer)}")
                     all_attns = np.add(all_attns, attn_matrix)
 
-                np.divide(all_attns, len(paths))
+                all_attns = np.divide(all_attns, len(paths))
                 self.plot_attention(all_attns,head,layer)
 
 
