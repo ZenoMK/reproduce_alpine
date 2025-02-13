@@ -328,7 +328,7 @@ class AttentionVisualizer:
     Utility class to visualize attention weights from a Transformer model.
     """
 
-    def __init__(self, model, tokenizer, out_dir):
+    def __init__(self, model, tokenizer, out_dir, test_path):
         """
         Initialize the visualizer with a model and tokenizer.
 
@@ -338,6 +338,7 @@ class AttentionVisualizer:
         """
         self.model = model
         self.out_dir = out_dir
+        self.test_path = test_path
         #self.tokenizer = tokenizer
 
     def infer_and_visualize_attention(
@@ -360,14 +361,11 @@ class AttentionVisualizer:
             use_power_scale (bool): Whether to apply power scale normalization.
             gamma (float): The gamma value for power normalization if use_power_scale is True.
         """
-        # Encode the input text
-        encoded_input = encode(input_text)
-        encoded_input_tensor = torch.tensor(encoded_input).unsqueeze(0)
-        print("Next tokens are calculated from the following input:", input_text)
+
 
         # Decode tokens for labels
-        labels = [decode([_token]) for _token in encoded_input]
-        print("Labels:", labels)
+        #labels = [decode([_token]) for _token in encoded_input]
+        #print("Labels:", labels)
         # In the plot, set labels size on axis x , y and title, to 0.5
         plt.rc("xtick", labelsize=4)
         plt.rc("ytick", labelsize=4)
@@ -376,6 +374,39 @@ class AttentionVisualizer:
         # Set model to evaluation mode and run inference
         self.model.eval()
         #self.model(encoded_input_tensor)
+        paths = []
+
+        with open(self.test_path, "r") as file:
+            for line in file:
+                numbers = line.split()
+                if len(numbers) == 8:  # Check if the path length is 8
+                    paths.append(" ".join(numbers))
+
+        for layer in layers:
+            for head in heads:
+                all_attns = np.zeros((8,8))
+
+                # average the attention over all length-8 paths
+                for path in paths:
+                    encoded_input = encode(path)
+                    encoded_input_tensor = torch.tensor(encoded_input).unsqueeze(0)
+                    logits, loss, attn_weights = self.model(encoded_input_tensor, return_attn_weights=True)
+                    if attn_weights is None or len(attn_weights) == 0:
+                        raise ValueError("Attention weights are missing. Ensure the model outputs them.")
+
+                    attn_layer = attn_weights[layer]
+                    if isinstance(attn_layer, torch.Tensor):  # If it's a single tensor
+                        attn_matrix = attn_layer[0, head].detach().numpy()
+                    elif isinstance(attn_layer, list):  # If it's a list of tensors
+                        attn_matrix = attn_layer[head][0].detach().numpy()
+                    else:
+                        raise TypeError(f"Unexpected attention weight type: {type(attn_layer)}")
+                    all_attns = np.add(all_attns, attn_matrix)
+
+                np.divide(all_attns, len(paths))
+                self.plot_attention(all_attns,head,layer)
+
+
 
         # Create a multiplot figure
         fig, axes = plt.subplots(len(layers), len(heads), figsize=(8, 8))
@@ -388,28 +419,15 @@ class AttentionVisualizer:
         elif len(heads) == 1:
             axes = [[ax] for ax in axes]
 
-        logits, loss, attn_weights = self.model(encoded_input_tensor, return_attn_weights=True)
         print("Type of attn_weights:", type(attn_weights[0]))
         print("Length of attn_weights:", len(attn_weights) if attn_weights else "None")
         print("Example shape:", attn_weights[0].shape if attn_weights else "None")
 
-        for layer in layers:
-            for head in heads:
-                # Extract attention weights
-                self.plot_attention(attn_weights, input_text, layer, head)
 
-    def plot_attention(self, attn_weights, sentence, layer=0, head=0):
-        if attn_weights is None or len(attn_weights) == 0:
-            raise ValueError("Attention weights are missing. Ensure the model outputs them.")
+        # Extract attention weights
+        #self.plot_attention(attn_weights, layer, head)
 
-        attn_layer = attn_weights[layer]
-
-        if isinstance(attn_layer, torch.Tensor):  # If it's a single tensor
-            attn_matrix = attn_layer[0, head].detach().cpu()#.numpy()
-        elif isinstance(attn_layer, list):  # If it's a list of tensors
-            attn_matrix = attn_layer[head][0].detach().cpu()#.numpy()
-        else:
-            raise TypeError(f"Unexpected attention weight type: {type(attn_layer)}")
+    def plot_attention(self, attn_matrix, layer=0, head=0):
 
 
         #plt.figure(figsize=(8, 6))
