@@ -65,7 +65,8 @@ model.eval()
 model.to(device)
 
 tokenizer = tiktoken.get_encoding("gpt2")
-viz = AttentionVisualizer(model, tokenizer)
+print(type(out_dir))
+viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir)
 viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44")
 
 

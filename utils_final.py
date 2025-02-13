@@ -17,11 +17,13 @@ from torch.nn import (
     Sequential,
 )
 from scale_dot_product_gpa import scaled_dot_product_gqa
+import seaborn as sns
 
 import matplotlib.pyplot as plt
 import torch
 import matplotlib.colors as mcolors
 from data.simple_graph.prepare_minigpt import encode, decode
+import os
 
 
 def create_dataloader_v1(
@@ -326,7 +328,7 @@ class AttentionVisualizer:
     Utility class to visualize attention weights from a Transformer model.
     """
 
-    def __init__(self, model, tokenizer):
+    def __init__(self, model, tokenizer, out_dir):
         """
         Initialize the visualizer with a model and tokenizer.
 
@@ -335,6 +337,7 @@ class AttentionVisualizer:
             tokenizer: The tokenizer used for encoding input.
         """
         self.model = model
+        self.out_dir = out_dir
         #self.tokenizer = tokenizer
 
     def infer_and_visualize_attention(
@@ -372,7 +375,7 @@ class AttentionVisualizer:
 
         # Set model to evaluation mode and run inference
         self.model.eval()
-        self.model(encoded_input_tensor)
+        #self.model(encoded_input_tensor)
 
         # Create a multiplot figure
         fig, axes = plt.subplots(len(layers), len(heads), figsize=(8, 8))
@@ -385,22 +388,39 @@ class AttentionVisualizer:
         elif len(heads) == 1:
             axes = [[ax] for ax in axes]
 
-        for i, layer in enumerate(layers):
-            for j, head in enumerate(heads):
+        logits, loss, attn_weights = self.model(encoded_input_tensor, return_attn_weights=True)
+        print("Type of attn_weights:", type(attn_weights[0]))
+        print("Length of attn_weights:", len(attn_weights) if attn_weights else "None")
+        print("Example shape:", attn_weights[0].shape if attn_weights else "None")
+
+        for layer in layers:
+            for head in heads:
                 # Extract attention weights
-                attention_weights = self.model.trf_blocks[layer].att.atten_weights
-                attention_matrix = attention_weights[0][head].detach().numpy()
+                self.plot_attention(attn_weights, input_text, layer, head)
 
-                # Plot attention weights for the specified head
-                ax = axes[i][j]
-                self._plot_attention(
-                    ax, attention_matrix, labels, head, layer, use_power_scale, gamma
-                )
+    def plot_attention(self, attn_weights, sentence, layer=0, head=0):
+        if attn_weights is None or len(attn_weights) == 0:
+            raise ValueError("Attention weights are missing. Ensure the model outputs them.")
 
-        plt.tight_layout()
-        plt.savefig(save_path)
-        plt.show()
-        print(f"Attention weights saved to {save_path}")
+        attn_layer = attn_weights[layer]
+
+        if isinstance(attn_layer, torch.Tensor):  # If it's a single tensor
+            attn_matrix = attn_layer[0, head].detach().cpu()#.numpy()
+        elif isinstance(attn_layer, list):  # If it's a list of tensors
+            attn_matrix = attn_layer[head][0].detach().cpu()#.numpy()
+        else:
+            raise TypeError(f"Unexpected attention weight type: {type(attn_layer)}")
+
+
+        #plt.figure(figsize=(8, 6))
+        sns.heatmap(attn_matrix, cmap="viridis")#, xticklabels=sentence, yticklabels=sentence)
+        plt.xlabel("Key Tokens")
+        plt.ylabel("Query Tokens")
+        plt.title(f"Attention Head {head} - Layer {layer}")
+        print(type(self.out_dir))
+
+        plt.savefig(os.path.join(self.out_dir,f"attention_{str(layer)}_layer_{str(head)}head.png"))
+        #print(f"Attention weights saved to {save_path}")
 
     def _plot_attention(
             self,
