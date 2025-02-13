@@ -21,6 +21,7 @@ from scale_dot_product_gpa import scaled_dot_product_gqa
 import matplotlib.pyplot as plt
 import torch
 import matplotlib.colors as mcolors
+from data.simple_graph.prepare_minigpt import encode, decode
 
 
 def create_dataloader_v1(
@@ -334,7 +335,7 @@ class AttentionVisualizer:
             tokenizer: The tokenizer used for encoding input.
         """
         self.model = model
-        self.tokenizer = tokenizer
+        #self.tokenizer = tokenizer
 
     def infer_and_visualize_attention(
             self,
@@ -357,12 +358,12 @@ class AttentionVisualizer:
             gamma (float): The gamma value for power normalization if use_power_scale is True.
         """
         # Encode the input text
-        encoded_input = self.tokenizer.encode(input_text)
+        encoded_input = encode(input_text)
         encoded_input_tensor = torch.tensor(encoded_input).unsqueeze(0)
         print("Next tokens are calculated from the following input:", input_text)
 
         # Decode tokens for labels
-        labels = [self.tokenizer.decode([_token]) for _token in encoded_input]
+        labels = [decode([_token]) for _token in encoded_input]
         print("Labels:", labels)
         # In the plot, set labels size on axis x , y and title, to 0.5
         plt.rc("xtick", labelsize=4)
