@@ -1,5 +1,8 @@
 
 import os
+
+import tiktoken
+
 from model import GPTConfig, GPT
 import numpy as np
 import networkx as nx
@@ -7,6 +10,9 @@ import argparse
 import pickle
 import re
 import torch
+from utils_final import (
+    AttentionVisualizer
+)
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -57,6 +63,10 @@ model.load_state_dict(state_dict)
 
 model.eval()
 model.to(device)
+
+tokenizer = tiktoken.get_encoding("gpt2")
+viz = AttentionVisualizer(model, tokenizer)
+AttentionVisualizer.infer_and_visualize_attention(input_text="21 44 21 23 30 32 44")
 
 
 
