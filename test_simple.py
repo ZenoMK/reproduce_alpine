@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument('--ckpt_iter', type=int, default=10000)
     parser.add_argument('--config', type=str, default='1_1_120')
     parser.add_argument('--temperature', type=float, default=1)
-    parser.add_argument('--device', type=str, default='cuda:0')
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--num_nodes', type=int, default=100)
     parser.add_argument('--num_of_paths', type=int, default=20)
     return parser.parse_args()
@@ -66,7 +66,7 @@ model.to(device)
 
 tokenizer = tiktoken.get_encoding("gpt2")
 viz = AttentionVisualizer(model, tokenizer)
-AttentionVisualizer.infer_and_visualize_attention(input_text="21 44 21 23 30 32 44")
+viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44")
 
 
 
