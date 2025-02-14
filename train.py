@@ -49,6 +49,7 @@ parser.add_argument('--n_embd', type=int, default=120, help='Size of the embeddi
 parser.add_argument('--max_iters', type=int, default=10000, help='Number of Iterations (default: 10000)')
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of Nodes (default: 100)')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of Paths (default: 1)')
+parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
 
 
 args = parser.parse_args()
@@ -60,15 +61,18 @@ n_embd = args.n_embd
 max_iters = args.max_iters
 num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
+problem = args.problem
 
 data_dir = os.path.join('data', f'{dataset}/{num_nodes}')
+if problem == "cut":
+    data_dir = os.path.join(data_dir,"_cut")
 with open(os.path.join(data_dir, 'meta.pkl'), 'rb') as f:
     meta = pickle.load(f)
     
 stoi, itos = meta['stoi'], meta['itos']
 block_size = meta['block_size']
 
-out_dir = f'out/{dataset}_{n_layer}_{n_head}_{n_embd}_{num_nodes}'
+out_dir = f'out/{dataset}_{n_layer}_{n_head}_{n_embd}_{num_nodes}_{problem}'
 
 # -----------------------------------------------------------------------------
 # default config values designed to train a gpt2 (124M) on OpenWebText

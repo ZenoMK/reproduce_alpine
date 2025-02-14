@@ -34,7 +34,7 @@ def find_random_cut(G, source, target):
 
     cut_value, (reachable, non_reachable) = nx.minimum_cut(G_cap, source, target)
     remaining_nodes = sorted(set(G.nodes()) - {target} - non_reachable)
-    num_additional = random.randint(1, len(remaining_nodes)) if remaining_nodes else 0
+    num_additional = random.randint(1, len(remaining_nodes) // 10) if remaining_nodes else 0
     additional_nodes = set(random.sample(remaining_nodes, num_additional))
 
     return non_reachable | additional_nodes
@@ -49,13 +49,15 @@ def create_dataset(G, num_nodes, max_paths=10, test_prob=0.5):
             if nx.has_path(G, s, t):
                 paths = find_paths(G, s, t, max_paths)
                 cut = find_random_cut(G, s, t)
-                paths_str = "#".join([" ".join(map(str, path)) for path in paths])
+                paths_str = "#".join([" ".join(map(str, path[1:])) for path in paths])
                 cut_str = " ".join(map(str, cut))
-                entry = f"{s} {t} {paths_str} % {cut_str}\n"
+                entry = f"{s} {t} ! {paths_str} %"
 
                 if random.random() < test_prob:
+                    entry = entry + "\n"
                     test_dataset.append(entry)
                 else:
+                    entry = entry + f"{cut_str}\n"
                     train_dataset.append(entry)
 
     return train_dataset, test_dataset
@@ -85,7 +87,7 @@ if __name__ == "__main__":
     random_digraph = generate_random_directed_graph(num_nodes, edge_prob, DAG)
     train_dataset, test_dataset = create_dataset(random_digraph, num_nodes, max_paths, test_prob)
 
-    folder_name = f"{num_nodes}_cuts"
+    folder_name = f"{num_nodes}_cut"
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
