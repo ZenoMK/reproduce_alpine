@@ -6,17 +6,20 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')  
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')  
-parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')  
+parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
+parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
+
 args = parser.parse_args()  
 
 num_nodes = args.num_nodes
+problem = args.problem
 
 if(args.num_of_paths == 0):
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/train.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
 else:
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/train_{args.num_of_paths}.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
 # test_file_path = os.path.join(os.path.dirname(__file__), 'test.txt')
 
 with open(train_file_path, 'r') as f:
@@ -79,16 +82,23 @@ stoi = {}
 itos = {}
 
 for i in range(num_nodes):
-    stoi[str(i)] = i+2
-    itos[i+2] = str(i)
+    stoi[str(i)] = i+5
+    itos[i+5] = str(i)
 
 stoi['[PAD]'] = 0
 itos[0] = '[PAD]'
 stoi['\n'] = 1
 itos[1] = '\n'
+stoi['!'] = 2
+itos[2] = '!'
+stoi['#'] = 3
+itos[3] = '#'
+stoi['%'] = 4
+itos[4] = '%'
+
 
 def encode(s):
-    return encode_string(s, stoi) # encoder: take a string, output a list of integers
+    return encode_string(s.rstrip(), stoi) # encoder: take a string, output a list of integers
 def decode(l):
     return decode_string(l, itos) # decoder: take a list of integers, output a string
 
@@ -109,11 +119,11 @@ train_ids = np.array(train_ids, dtype=np.uint16)
 val_ids = np.array(val_ids, dtype=np.uint16)
 
 if(args.num_of_paths == 0):
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/train.bin'))
-    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/val.bin'))
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.bin'))
+    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/val.bin'))
 else:
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/train_{args.num_of_paths}.bin'))
-    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/val.bin'))
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.bin'))
+    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/val.bin'))
 
 
 unreachable = False; simple_format = True
@@ -135,5 +145,5 @@ meta = {
 
 print(stoi)
 print(itos)
-with open(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}/meta.pkl'), 'wb') as f:
+with open(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
     pickle.dump(meta, f)

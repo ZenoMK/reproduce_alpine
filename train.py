@@ -63,9 +63,7 @@ num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 problem = args.problem
 
-data_dir = os.path.join('data', f'{dataset}/{num_nodes}')
-if problem == "cut":
-    data_dir = os.path.join(data_dir,"_cut")
+data_dir = os.path.join('data', f'{dataset}/{num_nodes}_{problem}')
 with open(os.path.join(data_dir, 'meta.pkl'), 'rb') as f:
     meta = pickle.load(f)
     

@@ -49,9 +49,9 @@ def create_dataset(G, num_nodes, max_paths=10, test_prob=0.5):
             if nx.has_path(G, s, t):
                 paths = find_paths(G, s, t, max_paths)
                 cut = find_random_cut(G, s, t)
-                paths_str = "#".join([" ".join(map(str, path[1:])) for path in paths])
+                paths_str = " # ".join([" ".join(map(str, path[1:])) for path in paths])
                 cut_str = " ".join(map(str, cut))
-                entry = f"{s} {t} ! {paths_str} %"
+                entry = f"{s} {t} ! {paths_str} % "
 
                 if random.random() < test_prob:
                     entry = entry + "\n"
@@ -92,5 +92,5 @@ if __name__ == "__main__":
         os.makedirs(folder_name)
 
     write_dataset(train_dataset, os.path.join(folder_name, f"train_{max_paths}.txt"))
-    write_dataset(test_dataset, os.path.join(folder_name, f"test_{max_paths}.txt"))
+    write_dataset(test_dataset, os.path.join(folder_name, f"test.txt"))
     nx.write_graphml(random_digraph, os.path.join(folder_name, "graph.graphml"))

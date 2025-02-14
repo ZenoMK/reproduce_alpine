@@ -151,7 +151,7 @@ if __name__ == "__main__":
     random_digraph = generate_random_directed_graph(num_nodes, edge_prob)
     reachability, feasible_pairs = obtain_reachability()
 
-    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}')
+    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_path')
     if not os.path.exists(folder_name):  
         os.makedirs(folder_name)
 
@@ -175,8 +175,8 @@ if __name__ == "__main__":
     obtain_stats(train_set)
     print('number of source target pairs:', len(test_set))
 
-    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}/train_{num_of_paths}.txt') )
-    write_dataset(test_set, os.path.join(os.path.dirname(__file__),  f'{num_nodes}/test.txt') )
-    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}/path_graph.graphml') )
+    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt') )
+    write_dataset(test_set, os.path.join(os.path.dirname(__file__),  f'{num_nodes}_path/test.txt') )
+    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/path_graph.graphml') )
 
     

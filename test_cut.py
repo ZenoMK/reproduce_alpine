@@ -34,7 +34,7 @@ num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 config = args.config
 
-data_path = f'data/{dataset}/{num_nodes}'
+data_path = f'data/{dataset}/{num_nodes}/cut'
 meta_path = f'{data_path}/meta.pkl'
 
 print(f"Loading meta from {meta_path}...")
@@ -46,7 +46,7 @@ max_new_tokens = meta['block_size']
 top_k = len(itos)
 simple_format = meta['simple_format']
 
-out_dir = f'out/{dataset}_{config}_{num_nodes}/'
+out_dir = f'out/{dataset}_{config}_{num_nodes}_cut/'
 
 if (num_of_paths == 0):
     ckpt_path = os.path.join(out_dir, f'{ckpt_iter}_ckpt.pt')
