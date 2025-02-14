@@ -1,4 +1,18 @@
 # ALPLINE Template Code
+
+## The code is taken from the supplementary material of https://openreview.net/forum?id=WFbZusv14E. 
+It was used in the following paper:
+
+    @inproceedings{
+    wang2024alpine,
+    title={{ALPINE}: Unveiling The Planning Capability of Autoregressive Learning in Language Models},
+    author={Siwei Wang and Yifei Shen and Shi Feng and Haoran Sun and Shang-Hua Teng and Wei Chen},
+    booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+    year={2024},
+    url={https://openreview.net/forum?id=WFbZusv14E}
+    }
+The repo owner does not claim authorship of the code.
+
 This is the modified NanoGPT code for planning on graphs. To configure the environment, we use
 
     conda create --name gptenv --file spec-file.txt
