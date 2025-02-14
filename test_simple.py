@@ -165,7 +165,7 @@ for i in tqdm(range(10)):
             symbol = check_path(path_graph, item)
             if(symbol != ""):
                 wrong = wrong + 1
-            f.write(item +" " + symbol + '\n')
+            f.write(item +" % " + symbol + '\n')
         f.write(f"Number of wrongs: {wrong}")
 
 

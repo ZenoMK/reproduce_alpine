@@ -70,8 +70,8 @@ print(type(out_dir))
 viz = AttentionVisualizer(model, tokenizer, out_dir=out_dir, test_path=f'{data_path}/test.txt')
 viz.infer_and_visualize_attention(heads=[0], layers=[0], input_text="21 44 21 23 30 32 44")
 
-path_graph = f'{data_path}/path_graph.graphml'
-path_graph = nx.read_graphml(path_graph)
+cut_graph = (f'{data_path}/graph.graphml')
+cut_graph = nx.read_graphml(cut_graph)
 
 
 def find_third_number_position(number_string):
@@ -123,6 +123,34 @@ def check_path_unreachable(G, gen_str, gt):
 
     return check_path(G, gen_str)
 
+def postprocess_output(gen_str):
+    parts = line.strip().split(" % ")
+    st_part, cut_part = parts
+    st_nodes = st_part.split()[:2]
+
+    s, t = map(int, st_nodes)
+    cut_vertices = set(map(int, cut_part.split()))
+
+    return cut_vertices, check_cut(cut_graph, s, t, cut_vertices)
+
+
+def check_cut(G, s, t, cut_vertices):
+    """
+    Checks if the given set of cut_vertices forms a valid cut between s and t.
+
+    Parameters:
+    - G: networkx.DiGraph, the directed graph
+    - s: int, source node
+    - t: int, target node
+    - cut_vertices: set of int, the vertices that form the cut
+
+    Returns:
+    - bool: True if it's a valid cut, False otherwise
+    """
+    G_cut = G.copy()
+    G_cut.remove_nodes_from(cut_vertices)
+    return not nx.has_path(G_cut, s, t)
+
 
 typedata = 'test'
 f = open(f'{data_path}/{typedata}.txt', encoding='gbk')
@@ -131,14 +159,11 @@ encode_texts = []
 ground_truth = []
 
 for line in f:
-    if not simple_format:
-        texts.append(line.split(':')[0] + ':')
-        encode_texts.append(encode(line.split(':')[0] + ':'))
-    else:
-        pos = find_third_number_position(line)
-        if (line[:pos] != ''):
-            texts.append(line[:pos])
-            encode_texts.append(encode(line[:pos]))
+    line = line.rstrip()
+    pos = line.find('!')
+    if (line[:pos] != ''):
+        texts.append(line[:pos])
+        encode_texts.append(encode(line[:pos]))
 
     ground_truth.append(line)
 
@@ -156,7 +181,6 @@ with open(out_dir + f'pred_{typedata}_{ckpt_iter}.txt', 'w') as f:
 wrong = 0
 for i in tqdm(range(10)):
     x = encode_texts[ix]
-    x_gt = ground_truth[ix]
 
     # x = (torch.tensor(text, dtype=torch.long, device=device))
     y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
@@ -165,10 +189,10 @@ for i in tqdm(range(10)):
 
     with open(out_dir + f'pred_{typedata}_{ckpt_iter}.txt', 'a') as f:
         for t, item in enumerate(y_pred):
-            symbol = ""#check_path(path_graph, item)
-            if (symbol != ""):
+            output, valid = postprocess_output(item)
+            if valid:
                 wrong = wrong + 1
-            f.write(x_gt +"!" + item + " " + symbol + '\n')
+            f.write(x +"!" + item + " " + str(valid) + '\n')
         f.write(f"Number of wrongs: {wrong}")
 
 
