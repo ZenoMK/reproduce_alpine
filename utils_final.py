@@ -22,7 +22,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import torch
 import matplotlib.colors as mcolors
-from data.simple_graph.prepare_minigpt import encode, decode
+from data.simple_graph.prepare_minigpt_path import encode, decode
 import os
 
 
