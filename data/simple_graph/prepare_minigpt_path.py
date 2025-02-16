@@ -188,19 +188,13 @@ stoi = {}
 itos = {}
 
 for i in range(num_nodes):
-    stoi[str(i)] = i + 5
-    itos[i + 5] = str(i)
+    stoi[str(i)] = i + 2
+    itos[i + 2] = str(i)
 
 stoi['[PAD]'] = 0
 itos[0] = '[PAD]'
 stoi['\n'] = 1
 itos[1] = '\n'
-stoi['!'] = 2
-itos[2] = '!'
-stoi['#'] = 3
-itos[3] = '#'
-stoi['%'] = 4
-itos[4] = '%'
 
 
 def encode(s):
