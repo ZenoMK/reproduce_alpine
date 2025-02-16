@@ -50,6 +50,8 @@ parser.add_argument('--max_iters', type=int, default=10000, help='Number of Iter
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of Nodes (default: 100)')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of Paths (default: 1)')
 parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
+parser.add_argument("--device", type=str, default = "cuda", help ="Which algorithmic problem (path/cut)")
+
 
 
 args = parser.parse_args()
@@ -62,6 +64,7 @@ max_iters = args.max_iters
 num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 problem = args.problem
+device = args.device
 
 data_dir = os.path.join('data', f'{dataset}/{num_nodes}_{problem}')
 with open(os.path.join(data_dir, 'meta.pkl'), 'rb') as f:
@@ -116,7 +119,7 @@ min_lr = learning_rate/10 # minimum learning rate, should be ~= learning_rate/10
 # DDP settings
 backend = 'nccl' # 'nccl', 'gloo', etc.
 # system
-device = 'cuda' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1' etc., or try 'mps' on macbooks
+#device = 'cuda' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1' etc., or try 'mps' on macbooks
 dtype = 'bfloat16' # 'float32', 'bfloat16', or 'float16', the latter will auto implement a GradScaler
 compile = True # use PyTorch 2.0 to compile the model to be faster
 
