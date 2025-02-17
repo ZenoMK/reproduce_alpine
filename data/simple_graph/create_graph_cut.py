@@ -91,6 +91,6 @@ if __name__ == "__main__":
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
-    write_dataset(train_dataset, os.path.join(os.path.dirname(__file__), os.path.join(folder_name, f"train_{max_paths}.txt")))
-    write_dataset(test_dataset, os.path.join(os.path.dirname(__file__), os.path.join(folder_name, f"test.txt")))
+    write_dataset(train_dataset,  os.path.join(folder_name, f"train_{max_paths}.txt"))
+    write_dataset(test_dataset, os.path.join(folder_name, f"test.txt"))
     nx.write_graphml(random_digraph, os.path.join(folder_name, "graph.graphml"))

@@ -12,7 +12,7 @@ parser.add_argument("--problem", type=str, default="path", help="Which algorithm
 args = parser.parse_args()
 
 num_nodes = args.num_nodes
-problem = args.problem
+problem = "cut"
 
 if (args.num_of_paths == 0):
     train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.txt')
