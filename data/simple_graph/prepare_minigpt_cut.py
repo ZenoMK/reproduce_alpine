@@ -81,7 +81,7 @@ def decode_string(l, numtos):
 
 # get all the unique characters that occur in this text
 chars = sorted(list(find_characters(all_data)))
-vocab_size = num_nodes + 2
+vocab_size = num_nodes + 5
 print("all the unique characters:", ' '.join(chars))
 print(f"vocab size: {vocab_size:,}")
 
@@ -194,7 +194,7 @@ def decode_string(l, numtos):
 
 # get all the unique characters that occur in this text
 chars = sorted(list(find_characters(all_data)))
-vocab_size = num_nodes + 2
+vocab_size = num_nodes + 5
 print("all the unique characters:", ' '.join(chars))
 print(f"vocab size: {vocab_size:,}")
 
