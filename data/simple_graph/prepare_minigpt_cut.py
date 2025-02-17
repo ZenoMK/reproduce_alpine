@@ -9,7 +9,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')
-parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
+parser.add_argument('--num_of_paths', type=int, default=10, help='Number of paths per pair nodes in training dataset')
 parser.add_argument("--problem", type=str, default="path", help="Which algorithmic problem (path/cut)")
 
 args = parser.parse_args()
@@ -61,7 +61,7 @@ def get_block_size(s):
     bs = 0
     for st in split_text:
         if (st != ""):
-            enc_str = encode(st) + [1]
+            enc_str = encode(st.rstrip()) + [1]
             bs = max(bs, len(enc_str))
     return bs
 
@@ -123,7 +123,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
-parser.add_argument("--problem", type=str, default="path", help="Which algorithmic problem (path/cut)")
+parser.add_argument("--problem", type=str, default="cut", help="Which algorithmic problem (path/cut)")
 
 args = parser.parse_args()
 
