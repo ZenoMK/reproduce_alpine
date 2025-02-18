@@ -67,8 +67,8 @@ model.to(device)
 
 tokenizer = tiktoken.get_encoding("gpt2")
 print(type(out_dir))
-viz = AttentionVisualizer(model, tokenizer, out_dir=out_dir, test_path=f'{data_path}/test.txt')
-viz.infer_and_visualize_attention(heads=[0], layers=[0], problem="cut")
+#viz = AttentionVisualizer(model, tokenizer, out_dir=out_dir, test_path=f'{data_path}/test.txt')
+#viz.infer_and_visualize_attention(heads=[0], layers=[0], problem="cut")
 
 cut_graph = (f'{data_path}/graph.graphml')
 cut_graph = nx.read_graphml(cut_graph)
