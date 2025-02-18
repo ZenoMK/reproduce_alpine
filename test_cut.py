@@ -34,7 +34,7 @@ num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 config = args.config
 
-data_path = f'data/{dataset}/{num_nodes}/cut'
+data_path = f'data/{dataset}/{num_nodes}_cut'
 meta_path = f'{data_path}/meta.pkl'
 
 print(f"Loading meta from {meta_path}...")
