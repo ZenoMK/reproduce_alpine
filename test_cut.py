@@ -150,6 +150,7 @@ def check_cut(G, s, t, cut_vertices):
     Returns:
     - bool: True if it's a valid cut, False otherwise
     """
+    cut_vertices.discard(s)
     G_cut = G.copy()
     G_cut.remove_nodes_from(cut_vertices)
     return not nx.has_path(G_cut, s, t)
