@@ -9,9 +9,9 @@ import argparse
 import pickle
 import re
 import torch
-from utils_final import (
-    AttentionVisualizer
-)
+#from utils_final import (
+  #  AttentionVisualizer
+#)
 
 
 def parse_args():
