@@ -125,7 +125,9 @@ def check_path_unreachable(G, gen_str, gt):
     return check_path(G, gen_str)
 
 def postprocess_output(gen_str):
-    parts = line.strip().split(" % ")
+    print(gen_str)
+    parts = gen_str.strip().split(" % ")
+    print(parts)
     st_part, cut_part = parts
     st_nodes = st_part.split()[:2]
 
