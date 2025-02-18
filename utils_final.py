@@ -16,6 +16,8 @@ from torch.nn import (
     Embedding,
     Sequential,
 )
+
+import data.simple_graph.prepare_minigpt_cut
 from scale_dot_product_gpa import scaled_dot_product_gqa
 import seaborn as sns
 
@@ -346,6 +348,7 @@ class AttentionVisualizer:
             input_text,
             heads,
             layers,
+            problem,
             save_path="attention_weights.png",
             use_power_scale=False,
             gamma=0.5,
@@ -388,7 +391,10 @@ class AttentionVisualizer:
 
                 # average the attention over all length-8 paths
                 for path in paths:
-                    encoded_input = encode(path)
+                    if problem == "cut":
+                        data.simple_graph.prepare_minigpt_cut.encode(path)
+                    else:
+                        encoded_input = encode(path)
                     encoded_input_tensor = torch.tensor(encoded_input).unsqueeze(0)
                     logits, loss, attn_weights = self.model(encoded_input_tensor, return_attn_weights=True)
                     if attn_weights is None or len(attn_weights) == 0:
