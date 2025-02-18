@@ -82,6 +82,7 @@ def find_third_number_position(number_string):
 
 
 def encode(s):
+    s = s.rstrip()
     ss = s.split(" ")
     encoded_string = [stoi[ch] for ch in ss]
     return encoded_string
