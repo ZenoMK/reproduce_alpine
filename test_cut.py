@@ -129,9 +129,10 @@ def postprocess_output(gen_str):
     parts = gen_str.strip().split(" % ")
     print(parts)
     st_part, cut_part = parts
-    st_nodes = st_part.split()[:2]
+    st_nodes = st_part.split("!")[0]
 
     s, t = map(int, st_nodes)
+    print(f"s: {s}, t : {t}")
     cut_vertices = set(map(int, cut_part.split()))
 
     return cut_vertices, check_cut(cut_graph, s, t, cut_vertices)
@@ -150,7 +151,7 @@ def check_cut(G, s, t, cut_vertices):
     Returns:
     - bool: True if it's a valid cut, False otherwise
     """
-    cut_vertices.discard(s)
+    cut_vertices = cut_vertices.discard(s)
     G_cut = G.copy()
     G_cut.remove_nodes_from(cut_vertices)
     return not nx.has_path(G_cut, s, t)
