@@ -155,6 +155,7 @@ def check_cut(G, s, t, cut_vertices):
     if s not in cut_vertices or t in cut_vertices:
         return False
     cut_vertices = cut_vertices.discard(s)
+    print(cut_vertices)
     G_cut = G.copy()
     G_cut.remove_nodes_from(cut_vertices)
     return not nx.has_path(G_cut, s, t)
