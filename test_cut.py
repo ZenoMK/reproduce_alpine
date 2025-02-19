@@ -134,7 +134,7 @@ def postprocess_output(gen_str):
 
     s, t = map(int, st_nodes)
     print(f"s: {s}, t : {t}")
-    if len(parts) > 2:
+    if len(parts) != 2:
         return None, False, s, t
     cut_vertices = set(map(int, cut_part.split()))
 
