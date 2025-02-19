@@ -197,6 +197,7 @@ for i in tqdm(range(10)):
 
     with open(out_dir + f'pred_{typedata}_{ckpt_iter}.txt', 'a') as f:
         for t, item in enumerate(y_pred):
+            print(item)
             output, valid, s, t = postprocess_output(item)
             if valid:
                 wrong = wrong + 1
