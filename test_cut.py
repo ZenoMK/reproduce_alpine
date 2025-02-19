@@ -128,15 +128,19 @@ def postprocess_output(gen_str):
     print(gen_str)
     parts = gen_str.strip().split(" % ")
     print(parts)
-    st_part, cut_part = parts
+    st_part, cut_part = parts[0], parts[1:]
     st_nodes = st_part.split("!")[0].rstrip()
     st_nodes = st_nodes.split()
 
     s, t = map(int, st_nodes)
     print(f"s: {s}, t : {t}")
+    if len(parts) > 2:
+        return None, False, s, t
     cut_vertices = set(map(int, cut_part.split()))
 
-    return cut_vertices, check_cut(cut_graph, s, t, cut_vertices), s, t
+    valid_cut = check_cut(cut_graph, s, t, cut_vertices)
+
+    return cut_vertices, valid_cut, s, t
 
 
 def check_cut(G, s, t, cut_vertices):
