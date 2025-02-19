@@ -129,7 +129,8 @@ def postprocess_output(gen_str):
     parts = gen_str.strip().split(" % ")
     print(parts)
     st_part, cut_part = parts
-    st_nodes = st_part.split("!")[0]
+    st_nodes = st_part.split("!")[0].rstrip()
+    st_nodes = st_nodes.split()
 
     s, t = map(int, st_nodes)
     print(f"s: {s}, t : {t}")
@@ -151,6 +152,8 @@ def check_cut(G, s, t, cut_vertices):
     Returns:
     - bool: True if it's a valid cut, False otherwise
     """
+    if s not in cut_vertices or t in cut_vertices:
+        return False
     cut_vertices = cut_vertices.discard(s)
     G_cut = G.copy()
     G_cut.remove_nodes_from(cut_vertices)
