@@ -136,7 +136,7 @@ def postprocess_output(gen_str):
     print(f"s: {s}, t : {t}")
     cut_vertices = set(map(int, cut_part.split()))
 
-    return cut_vertices, check_cut(cut_graph, s, t, cut_vertices)
+    return cut_vertices, check_cut(cut_graph, s, t, cut_vertices), s, t
 
 
 def check_cut(G, s, t, cut_vertices):
@@ -197,10 +197,10 @@ for i in tqdm(range(10)):
 
     with open(out_dir + f'pred_{typedata}_{ckpt_iter}.txt', 'a') as f:
         for t, item in enumerate(y_pred):
-            output, valid = postprocess_output(item)
+            output, valid, s, t = postprocess_output(item)
             if valid:
                 wrong = wrong + 1
-            f.write(x +"!" + item + " " + str(valid) + '\n')
+            f.write(f"{s} {t}" +"!" + item + " " + str(valid) + '\n')
         f.write(f"Number of wrongs: {wrong}")
 
 
