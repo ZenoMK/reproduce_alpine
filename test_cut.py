@@ -125,16 +125,22 @@ def check_path_unreachable(G, gen_str, gt):
     return check_path(G, gen_str)
 
 def postprocess_output(gen_str):
-    print(gen_str)
     parts = gen_str.strip().split(" % ")
-    print(parts)
-    st_part, cut_part = parts[0], parts[1:]
+    if len(parts) != 2:
+        split = parts[0].rstrip().split()
+        s, t = split[0], split[1]
+        return None, False, s,t
+
+    st_part, cut_part = parts[0], parts[1]
     st_nodes = st_part.split("!")[0].rstrip()
     st_nodes = st_nodes.split()
 
+    if len(st_nodes) != 2:
+        return None, False, None, None
+
     s, t = map(int, st_nodes)
     print(f"s: {s}, t : {t}")
-    if len(parts) != 2:
+    if not cut_part.replace(" ","").isnumeric():
         return None, False, s, t
     cut_vertices = set(map(int, cut_part.split()))
 
@@ -158,11 +164,13 @@ def check_cut(G, s, t, cut_vertices):
     """
     if s not in cut_vertices or t in cut_vertices:
         return False
-    cut_vertices = cut_vertices.discard(s)
-    print(cut_vertices)
+    cut_vertices.discard(s)
+    cut_vertices = set(map(str, cut_vertices))
     G_cut = G.copy()
+    print(list(G_cut.nodes))
     G_cut.remove_nodes_from(cut_vertices)
-    return not nx.has_path(G_cut, s, t)
+    print(list(G_cut.nodes))
+    return not nx.has_path(G_cut, str(s), str(t))
 
 
 typedata = 'test'
@@ -204,7 +212,7 @@ for i in tqdm(range(10)):
         for t, item in enumerate(y_pred):
             print(item)
             output, valid, s, t = postprocess_output(item)
-            if valid:
+            if not valid:
                 wrong = wrong + 1
             f.write(f"{s} {t}" +"!" + item + " " + str(valid) + '\n')
         f.write(f"Number of wrongs: {wrong}")
