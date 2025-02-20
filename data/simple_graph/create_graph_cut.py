@@ -35,7 +35,7 @@ def find_random_cut(G, source, target):
     cut_value, (reachable, non_reachable) = nx.minimum_cut(G_cap, source, target)
     #remaining_nodes = sorted(set(G.nodes()) - {target} - non_reachable)
     #num_additional = random.randint(1, len(remaining_nodes) // 10) if remaining_nodes else 0
-    additional_nodes = set(random.sample(remaining_nodes, num_additional))
+    #additional_nodes = set(random.sample(remaining_nodes, num_additional))
 
     return non_reachable # | additional_nodes
 
