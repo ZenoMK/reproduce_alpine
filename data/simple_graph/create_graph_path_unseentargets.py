@@ -67,23 +67,33 @@ def random_walk(source_node, target_node):
 
     return visited
 
-
 def create_dataset(i):
     train_set = []
     test_set = []
     train_num_per_pair = max(i, 1)
+
+    # Track valid targets appearing in training paths
+    #valid_test_targets = set()
+    test_targets = set([node for node in range(num_nodes) if random.random() > chance_in_train])
+
     for target_node in range(num_nodes):
-        cnt = 0  # to avoid some target not appear in training dataset
         for source_node in range(target_node):
-            if (data[source_node][target_node] == 1):
+            if data[source_node][target_node] == 1:  # If included in training
                 if random_digraph.has_edge(source_node, target_node):
                     train_set.append([source_node, target_node, source_node, target_node])
-                for ii in range(train_num_per_pair):
-                    train_set.append([source_node, target_node] + random_walk(source_node, target_node))
-            if (data[source_node][target_node] == -1):
-                test_set.append([source_node, target_node] + random_walk(source_node, target_node))
+                for _ in range(train_num_per_pair):
+                    path = random_walk(source_node, target_node)
+                    train_set.append([source_node, target_node] + path)
+
+                    # add all test targets on the path to test set
+                    for target in set(path).intersection(test_targets):
+                        if num_testpaths[source_node, target] == 0:
+                            test_set.append([source_node, target] + random_walk(source_node, target))
+                            num_testpaths[source_node, target] += 1
+
 
     return train_set, test_set
+
 
 
 def add_x(train_set, test_set):
@@ -150,6 +160,7 @@ if __name__ == "__main__":
     parser.add_argument('--chance_in_train', type=float, default=0.5, help='Chance of a pair being in the training set')
     parser.add_argument('--num_of_paths', type=int, default=20,
                         help='Number of paths per pair nodes in training dataset')
+    parser.add_argument('--include_all_edges', type=bool, default=True, help='Whether to make sure all edges are in the graph.')
 
     args = parser.parse_args()
 
@@ -166,15 +177,17 @@ if __name__ == "__main__":
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
-    test_targets = [node for node in range(num_nodes) if random.random() < chance_in_train]
+    #test_targets = [node for node in range(num_nodes) if random.random() < chance_in_train]
 
     data = numpy.zeros([num_nodes, num_nodes])
+    num_testpaths = numpy.zeros([num_nodes, num_nodes])
+
     for target_node in range(num_nodes):
         cnt = 0  # to avoid some target not appear in training dataset
         for source_node in range(target_node):
             if source_node in reachability[target_node]:
                 # this ensures all edges in the graph that are s-t paths are in the train set
-                if target_node not in test_targets:# or (random_digraph.has_edge(source_node, target_node)):
+                if random.random() < chance_in_train:# or (random_digraph.has_edge(source_node, target_node)):
                     data[source_node][target_node] = 1
 
 
