@@ -161,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument('--chance_in_train', type=float, default=0.5, help='Chance of a pair being in the training set')
     parser.add_argument('--num_of_paths', type=int, default=20,
                         help='Number of paths per pair nodes in training dataset')
-    parser.add_argument('--include_all_edges', type=bool, default=True, help='Whether to make sure all edges are in the graph.')
+    parser.add_argument('--include_all_edges', default=False, help='Whether to make sure all edges are in the graph.', action= "store_true")
 
     args = parser.parse_args()
 
@@ -171,6 +171,7 @@ if __name__ == "__main__":
     chance_in_train = args.chance_in_train
     num_of_paths = args.num_of_paths
     include_all_edges = args.include_all_edges
+    print(include_all_edges)
 
     random_digraph = generate_random_directed_graph(num_nodes, edge_prob)
     reachability, feasible_pairs = obtain_reachability()
