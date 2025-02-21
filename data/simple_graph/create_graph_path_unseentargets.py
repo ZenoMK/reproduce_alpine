@@ -74,7 +74,6 @@ def create_dataset(i):
 
     # Track valid targets appearing in training paths
     #valid_test_targets = set()
-    test_targets = set([node for node in range(num_nodes) if random.random() > chance_in_train])
 
     for target_node in range(num_nodes):
         for source_node in range(target_node):
@@ -182,13 +181,14 @@ if __name__ == "__main__":
 
     data = numpy.zeros([num_nodes, num_nodes])
     num_testpaths = numpy.zeros([num_nodes, num_nodes])
+    test_targets = set([node for node in range(num_nodes) if random.random() > chance_in_train])
 
     for target_node in range(num_nodes):
         cnt = 0  # to avoid some target not appear in training dataset
         for source_node in range(target_node):
             if source_node in reachability[target_node]:
                 # this ensures all edges in the graph that are s-t paths are in the train set
-                if random.random() < chance_in_train or (include_all_edges and random_digraph.has_edge(source_node, target_node)):
+                if target_node not in test_targets or (include_all_edges and random_digraph.has_edge(source_node, target_node)):
                     data[source_node][target_node] = 1
 
 
