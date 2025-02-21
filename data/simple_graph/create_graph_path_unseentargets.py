@@ -174,9 +174,10 @@ if __name__ == "__main__":
         for source_node in range(target_node):
             if source_node in reachability[target_node]:
                 # this ensures all edges in the graph that are s-t paths are in the train set
-                if (random_digraph.has_edge(source_node, target_node)) or target_node not in test_targets:
+                if target_node not in test_targets:# or (random_digraph.has_edge(source_node, target_node)):
                     data[source_node][target_node] = 1
-                    cnt += 1
+
+
                 else:
                     data[source_node][target_node] = -1
                 # if (random_digraph.has_edge(source_node, target_node)):
