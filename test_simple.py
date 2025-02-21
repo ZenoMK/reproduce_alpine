@@ -33,7 +33,7 @@ num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 config = args.config
 
-data_path = f'data/{dataset}/{num_nodes}/path'
+data_path = f'data/{dataset}/{num_nodes}_path'
 meta_path = f'{data_path}/meta.pkl'
 
 print(f"Loading meta from {meta_path}...")
@@ -45,7 +45,7 @@ max_new_tokens = meta['block_size']
 top_k = len(itos)
 simple_format = meta['simple_format']
 
-out_dir = f'out/{dataset}_{config}_{num_nodes}_cut/'
+out_dir = f'out/{dataset}_{config}_{num_nodes}_path/'
 
 if(num_of_paths == 0):
     ckpt_path = os.path.join(out_dir, f'{ckpt_iter}_ckpt.pt')
@@ -67,7 +67,7 @@ model.to(device)
 tokenizer = tiktoken.get_encoding("gpt2")
 print(type(out_dir))
 viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir, test_path=f'{data_path}/test.txt')
-viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44")
+viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44", problem = "path")
 
 
 
