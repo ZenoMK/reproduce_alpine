@@ -85,10 +85,12 @@ def create_dataset(i):
                     train_set.append([source_node, target_node] + path)
 
                     # add all test targets on the path to test set
-                    for target in set(path).intersection(test_targets):
-                        if num_testpaths[source_node, target] == 0:
-                            test_set.append([source_node, target] + random_walk(source_node, target))
-                            num_testpaths[source_node, target] += 1
+                    #for target in set(path).intersection(test_targets):
+                       # if num_testpaths[source_node, target] == 0:
+                        #    test_set.append([source_node, target] + random_walk(source_node, target))
+                       #     num_testpaths[source_node, target] += 1
+            if (data[source_node][target_node] == -1):
+                test_set.append([source_node, target_node] + random_walk(source_node, target_node))
 
 
     return train_set, test_set
