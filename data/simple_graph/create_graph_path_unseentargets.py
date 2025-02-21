@@ -169,6 +169,7 @@ if __name__ == "__main__":
     DAG = args.DAG
     chance_in_train = args.chance_in_train
     num_of_paths = args.num_of_paths
+    include_all_edges = args.include_all_edges
 
     random_digraph = generate_random_directed_graph(num_nodes, edge_prob)
     reachability, feasible_pairs = obtain_reachability()
@@ -187,7 +188,7 @@ if __name__ == "__main__":
         for source_node in range(target_node):
             if source_node in reachability[target_node]:
                 # this ensures all edges in the graph that are s-t paths are in the train set
-                if random.random() < chance_in_train:# or (random_digraph.has_edge(source_node, target_node)):
+                if random.random() < chance_in_train or (include_all_edges and random_digraph.has_edge(source_node, target_node)):
                     data[source_node][target_node] = 1
 
 
