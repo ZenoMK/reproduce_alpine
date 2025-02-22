@@ -23,6 +23,7 @@ parser.add_argument('--temperature', type=float, default=1)
 parser.add_argument('--device', type=str, default='cpu')
 parser.add_argument('--num_nodes', type=int, default=100)
 parser.add_argument('--num_of_paths', type=int, default=20)
+parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
 
 print("DEBUG: Checking defined arguments")
 for action in parser._actions:
@@ -31,13 +32,14 @@ for action in parser._actions:
 args = parser.parse_args()
 dataset = args.graph_type
 ckpt_iter = args.ckpt_iter
+problem = args.problem
 device = args.device
 temperature = args.temperature
 num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 config = args.config
 
-data_path = f'data/{dataset}/{num_nodes}_path'
+data_path = f'data/{dataset}/{num_nodes}_{problem}'
 meta_path = f'{data_path}/meta.pkl'
 
 print(f"Loading meta from {meta_path}...")
