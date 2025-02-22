@@ -33,7 +33,7 @@ device = args.device
 temperature = args.temperature
 num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
-config = args.config
+config = "6_6_120"
 
 data_path = f'data/{dataset}/{num_nodes}_{problem}'
 meta_path = f'{data_path}/meta.pkl'

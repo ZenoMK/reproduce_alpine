@@ -40,10 +40,10 @@ def create_dataset(G):
     train_set = []
     test_set = get_root_to_leaf_paths(G)  # Root-to-leaf paths only in test
 
-    covered_edges = set()
+    edge_counts = {edge: 0 for edge in G.edges()}  # Track occurrences of each edge
     all_edges = set(G.edges())
 
-    while covered_edges != all_edges:
+    while min(edge_counts.values()) < 20:  # Ensure each edge appears at least 20 times
         path = random.choice(test_set)  # Pick a root-to-leaf path
         if len(path) > 2:
             subpath_length = random.randint(2, len(path) - 1)
@@ -56,9 +56,11 @@ def create_dataset(G):
         train_set.append(subpath)
 
         for i in range(len(subpath) - 1):
-            covered_edges.add((subpath[i], subpath[i + 1]))
+            edge = (subpath[i], subpath[i + 1])
+            edge_counts[edge] += 1
 
     return train_set, test_set
+
 
 
 def format_data(data):
