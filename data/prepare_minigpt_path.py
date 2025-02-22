@@ -8,18 +8,22 @@ parser = argparse.ArgumentParser(description='Create the dataset based on the gi
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')  
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
 parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
+parser.add_argument('--graph_type', type=str, default='simple_graph')
+
+
 
 args = parser.parse_args()  
 
 num_nodes = args.num_nodes
 problem = args.problem
+dataset = args.graph_type
 
 if(args.num_of_paths == 0):
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 else:
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 # test_file_path = os.path.join(os.path.dirname(__file__), 'test.txt')
 
 with open(train_file_path, 'r') as f:
@@ -109,20 +113,23 @@ import argparse
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
-parser.add_argument("--problem", type=str, default="path", help="Which algorithmic problem (path/cut)")
+parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
+parser.add_argument('--graph_type', type=str, default='simple_graph')
+
+
 
 args = parser.parse_args()
 
 num_nodes = args.num_nodes
 problem = args.problem
+dataset = args.graph_type
 
-if (args.num_of_paths == 0):
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
+if(args.num_of_paths == 0):
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 else:
-    train_file_path = os.path.join(os.path.dirname(__file__),
-                                   f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 # test_file_path = os.path.join(os.path.dirname(__file__), 'test.txt')
 
 with open(train_file_path, 'r') as f:
@@ -222,13 +229,12 @@ print(f"val has {len(val_ids):,} tokens")
 train_ids = np.array(train_ids, dtype=np.uint16)
 val_ids = np.array(val_ids, dtype=np.uint16)
 
-if (args.num_of_paths == 0):
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.bin'))
-    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/val.bin'))
+if(args.num_of_paths == 0):
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 else:
-    train_ids.tofile(
-        os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.bin'))
-    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/val.bin'))
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 
 unreachable = False;
 simple_format = True
@@ -249,7 +255,7 @@ meta = {
 
 print(stoi)
 print(itos)
-with open(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
+with open(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
     pickle.dump(meta, f)
 
 print(f"the block size is {block_size}")
@@ -266,12 +272,11 @@ train_ids = np.array(train_ids, dtype=np.uint16)
 val_ids = np.array(val_ids, dtype=np.uint16)
 
 if(args.num_of_paths == 0):
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.bin'))
-    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/val.bin'))
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 else:
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.bin'))
-    val_ids.tofile(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/val.bin'))
-
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
 
 unreachable = False; simple_format = True
 if 'x' in chars:
@@ -292,5 +297,5 @@ meta = {
 
 print(stoi)
 print(itos)
-with open(os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
+with open(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
     pickle.dump(meta, f)

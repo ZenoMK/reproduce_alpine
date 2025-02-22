@@ -1,7 +1,6 @@
 # This file is copied verbatim from: https://github.com/rmaestre/transformers_path_search?tab=readme-ov-file.
 # No authorship is claimed
 
-import torch
 import tiktoken
 import json
 import numpy as np
@@ -11,20 +10,19 @@ from torch.nn import (
     Parameter,
     Module,
     Linear,
-    ModuleList,
     Dropout,
     Embedding,
     Sequential,
 )
 
-import data.simple_graph.prepare_minigpt_cut
+#import data.simple_graph.prepare_minigpt_cut
 from scale_dot_product_gpa import scaled_dot_product_gqa
 import seaborn as sns
 
 import matplotlib.pyplot as plt
 import torch
 import matplotlib.colors as mcolors
-from data.simple_graph.prepare_minigpt_path import encode, decode
+from data.prepare_minigpt_path import encode
 import os
 
 
@@ -224,7 +222,7 @@ class MultiHeadAttention(Module):
         return context_vec
 
 
-from einops import rearrange, einsum
+from einops import rearrange
 
 
 class MultiheadGQA(Module):
