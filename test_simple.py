@@ -17,6 +17,7 @@ from utils_final import (
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--ckpt_iter', type=int, default=10000)
+    parser.add_argument('--graph_type', type=str, default='simple_graph')
     parser.add_argument('--config', type=str, default='1_1_120')
     parser.add_argument('--temperature', type=float, default=1)
     parser.add_argument('--device', type=str, default='cpu')
@@ -25,7 +26,7 @@ def parse_args():
     return parser.parse_args()
 
 args = parse_args()
-dataset = 'simple_graph'
+dataset = args.graph_type
 ckpt_iter = args.ckpt_iter
 device = args.device
 temperature = args.temperature

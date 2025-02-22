@@ -45,7 +45,11 @@ def create_dataset(G):
 
     while covered_edges != all_edges:
         path = random.choice(test_set)  # Pick a root-to-leaf path
-        subpath_length = random.randint(2, len(path) - 1)  # Ensure subpath
+        if len(path) > 2:
+            subpath_length = random.randint(2, len(path) - 1)
+        else:
+            subpath_length = 2  # Default to the minimum valid length
+
         subpath_start = random.randint(0, len(path) - subpath_length)
         subpath = path[subpath_start: subpath_start + subpath_length]
 
@@ -58,7 +62,7 @@ def create_dataset(G):
 
 
 def format_data(data):
-    return " ".join(map(str, data)) + "\n"
+    return f"{data[0]} {data[1]} " + ' '.join(str(num) for num in data[2:]) + '\n'
 
 
 def write_dataset(dataset, file_name):
@@ -76,11 +80,12 @@ if __name__ == "__main__":
     rooted_tree = generate_random_rooted_tree(num_nodes)
     train_set, test_set = create_dataset(rooted_tree)
 
-    folder_name = f'{num_nodes}_tree'
+    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_tree')
     os.makedirs(folder_name, exist_ok=True)
 
-    write_dataset(train_set, os.path.join(folder_name, 'train.txt'))
-    write_dataset(test_set, os.path.join(folder_name, 'test.txt'))
-    nx.write_graphml(rooted_tree, os.path.join(folder_name, 'tree.graphml'))
+
+    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_tree/train_20.txt'))
+    write_dataset(test_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_tree/test.txt'))
+    nx.write_graphml(rooted_tree, os.path.join(os.path.dirname(__file__), f'{num_nodes}_tree/path_graph.graphml'))
 
     print(f"Dataset generated in {folder_name}/")

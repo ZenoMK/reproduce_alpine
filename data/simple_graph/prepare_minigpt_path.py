@@ -60,6 +60,7 @@ def get_block_size(s):
 
 
 def encode_string(s, stonum):
+    s = s.rstrip()
     ss = s.split(" ")
     encoded_string = [stonum[ch] for ch in ss]
     return encoded_string
