@@ -25,10 +25,6 @@ parser.add_argument('--num_nodes', type=int, default=100)
 parser.add_argument('--num_of_paths', type=int, default=20)
 parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
 
-print("DEBUG: Checking defined arguments")
-for action in parser._actions:
-    print(action.option_strings)
-
 args = parser.parse_args()
 dataset = args.graph_type
 ckpt_iter = args.ckpt_iter
@@ -51,7 +47,7 @@ max_new_tokens = meta['block_size']
 top_k = len(itos)
 simple_format = meta['simple_format']
 
-out_dir = f'out/{dataset}_{config}_{num_nodes}_path/'
+out_dir = f'out/{dataset}_{config}_{num_nodes}_{problem}/'
 
 if(num_of_paths == 0):
     ckpt_path = os.path.join(out_dir, f'{ckpt_iter}_ckpt.pt')

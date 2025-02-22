@@ -62,7 +62,7 @@ def create_dataset(G):
 
 
 def format_data(data):
-    return f"{data[0]} {data[1]} " + ' '.join(str(num) for num in data[2:]) + '\n'
+    return f"{data[0]} {data[-1]} " + ' '.join(str(num) for num in data) + '\n'
 
 
 def write_dataset(dataset, file_name):
