@@ -15,11 +15,11 @@ num_nodes = args.num_nodes
 problem = args.problem
 
 if(args.num_of_paths == 0):
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_tree/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_tree/test.txt')
 else:
-    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
-    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_{problem}/test.txt')
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_tree/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{args.num_nodes}_tree/test.txt')
 # test_file_path = os.path.join(os.path.dirname(__file__), 'test.txt')
 
 with open(train_file_path, 'r') as f:
@@ -109,7 +109,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
-parser.add_argument("--problem", type=str, default="path", help="Which algorithmic problem (path/cut)")
+parser.add_argument("--problem", type=str, default="tree", help="Which algorithmic problem (path/cut)")
 
 args = parser.parse_args()
 
