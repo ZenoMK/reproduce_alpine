@@ -119,10 +119,10 @@ val_ids = np.array(val_ids, dtype=np.uint16)
 
 if(args.num_of_paths == 0):
     train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.bin'))
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.bin'))
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/val.bin'))
 else:
     train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.bin'))
-    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.bin'))
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/val.bin'))
 
 unreachable = False;
 simple_format = True
