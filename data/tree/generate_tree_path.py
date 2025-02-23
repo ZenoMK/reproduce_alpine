@@ -43,7 +43,7 @@ def create_dataset(G):
     edge_counts = {edge: 0 for edge in G.edges()}  # Track occurrences of each edge
     all_edges = set(G.edges())
 
-    while min(edge_counts.values()) < 1:  # Ensure each edge appears at least 20 times
+    while min(edge_counts.values()) < 20:  # Ensure each edge appears at least 20 times
         path = random.choice(test_set)  # Pick a root-to-leaf path
         if len(path) > 2:
             subpath_length = random.randint(2, len(path) - 1)
