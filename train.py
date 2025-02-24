@@ -356,9 +356,10 @@ train_losses = []
 val_losses = []
 plot_interval = 100  # Update plot every 100 steps
 
-# Set up real-time plotting
-plt.ion()  # Turn on interactive mode
-fig, ax = plt.subplots(figsize=(10, 5))
+# Initialize lists to store losses
+train_losses = []
+val_losses = []
+
 
 while True:
     
@@ -376,6 +377,8 @@ while True:
     # evaluate the loss on train/val sets and write checkpoints
     if iter_num % eval_interval == 0 and master_process:
         losses = estimate_loss()
+        train_losses.append(losses['train'])
+        val_losses.append(losses['val'])
         print(f"step {iter_num}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
         logger.info(f"step {iter_num}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
         open_and_append(log_file_name, f"step {iter_num}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
@@ -438,10 +441,6 @@ while True:
     dt = t1 - t0
     t0 = t1
     if iter_num % log_interval == 0 and master_process:
-        losses = estimate_loss()
-        train_losses.append(losses['train'])
-        val_losses.append(losses['val'])
-
         lossf = loss.item() * gradient_accumulation_steps
         if local_iter_num >= 5: # let the training loop settle a bit
             mfu = raw_model.estimate_mfu(batch_size * gradient_accumulation_steps, dt)
@@ -449,21 +448,20 @@ while True:
         print(f"iter {iter_num}: loss {lossf:.4f}, time {dt*1000:.2f}ms, mfu {running_mfu*100:.2f}%")
         logger.info(f"iter {iter_num}: loss {lossf:.4f}")
         open_and_append(log_file_name, f"iter {iter_num}: loss {lossf:.4f}")
-    if iter_num % plot_interval == 0 and master_process and iter_num > 0:
-        ax.clear()
-        ax.plot(range(len(train_losses)), train_losses, label="Training Loss", color='blue')
-        ax.plot(range(len(val_losses)), val_losses, label="Validation Loss", color='red')
-        ax.set_xlabel("Evaluation Steps")
-        ax.set_ylabel("Loss")
-        ax.set_title("Training & Validation Loss Over Time")
-        ax.legend()
-        ax.grid()
-        plt.draw()
-        plt.pause(0.1)
     iter_num += 1
     local_iter_num += 1
 
     if iter_num > max_iters:
+        plt.figure(figsize=(10, 5))
+        plt.plot(range(0, iter_num + 1, eval_interval), train_losses, label='Training Loss', marker='o')
+        plt.plot(range(0, iter_num + 1, eval_interval), val_losses, label='Validation Loss', marker='s')
+        plt.xlabel('Iteration')
+        plt.ylabel('Loss')
+        plt.title('Training and Validation Loss Over Time')
+        plt.legend()
+        plt.grid(True)
+        plt.savefig(os.path.join(out_dir, 'training_loss_plot.png'))
+        plt.close()
         break
 
 torch.save(torch.tensor(corrects).cpu(), os.path.join(out_dir, f'corrects.pt'))
