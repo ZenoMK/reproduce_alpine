@@ -1,0 +1,122 @@
+[2025-02-24 19:09:16,109][INFO] step 0: train loss 6.2581, val loss 6.2581
+[2025-02-24 19:09:19,426][INFO] iter 0: loss 6.2551
+[2025-02-24 19:09:24,674][INFO] iter 100: loss 5.7023
+[2025-02-24 19:09:29,660][INFO] iter 200: loss 4.7177
+[2025-02-24 19:09:34,995][INFO] iter 300: loss 3.5903
+[2025-02-24 19:09:40,011][INFO] iter 400: loss 2.7241
+[2025-02-24 19:09:45,167][INFO] iter 500: loss 2.1406
+[2025-02-24 19:09:50,209][INFO] iter 600: loss 1.9345
+[2025-02-24 19:09:55,266][INFO] iter 700: loss 1.7950
+[2025-02-24 19:10:00,606][INFO] iter 800: loss 1.7116
+[2025-02-24 19:10:05,688][INFO] iter 900: loss 1.6547
+[2025-02-24 19:11:11,964][INFO] step 1000: train loss 1.6374, val loss 1.6353
+[2025-02-24 19:11:11,965][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:11:12,076][INFO] iter 1000: loss 1.6487
+[2025-02-24 19:11:17,173][INFO] iter 1100: loss 1.6156
+[2025-02-24 19:11:22,551][INFO] iter 1200: loss 1.5747
+[2025-02-24 19:11:27,640][INFO] iter 1300: loss 1.5722
+[2025-02-24 19:11:32,904][INFO] iter 1400: loss 1.5738
+[2025-02-24 19:11:38,054][INFO] iter 1500: loss 1.5489
+[2025-02-24 19:11:43,325][INFO] iter 1600: loss 1.5139
+[2025-02-24 19:11:48,442][INFO] iter 1700: loss 1.5057
+[2025-02-24 19:11:53,566][INFO] iter 1800: loss 1.5134
+[2025-02-24 19:11:58,856][INFO] iter 1900: loss 1.5321
+[2025-02-24 19:13:05,749][INFO] step 2000: train loss 1.5031, val loss 1.5050
+[2025-02-24 19:13:05,749][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:13:05,877][INFO] iter 2000: loss 1.5021
+[2025-02-24 19:13:11,099][INFO] iter 2100: loss 1.5045
+[2025-02-24 19:13:16,199][INFO] iter 2200: loss 1.4807
+[2025-02-24 19:13:21,356][INFO] iter 2300: loss 1.4877
+[2025-02-24 19:13:26,479][INFO] iter 2400: loss 1.5109
+[2025-02-24 19:13:31,608][INFO] iter 2500: loss 1.4924
+[2025-02-24 19:13:36,872][INFO] iter 2600: loss 1.4729
+[2025-02-24 19:13:42,027][INFO] iter 2700: loss 1.4995
+[2025-02-24 19:13:47,278][INFO] iter 2800: loss 1.4425
+[2025-02-24 19:13:52,449][INFO] iter 2900: loss 1.4883
+[2025-02-24 19:14:58,195][INFO] step 3000: train loss 1.4627, val loss 1.4607
+[2025-02-24 19:14:58,196][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:14:58,300][INFO] iter 3000: loss 1.4691
+[2025-02-24 19:15:03,452][INFO] iter 3100: loss 1.4620
+[2025-02-24 19:15:08,845][INFO] iter 3200: loss 1.4667
+[2025-02-24 19:15:14,020][INFO] iter 3300: loss 1.4537
+[2025-02-24 19:15:19,294][INFO] iter 3400: loss 1.4547
+[2025-02-24 19:15:24,439][INFO] iter 3500: loss 1.4449
+[2025-02-24 19:15:29,754][INFO] iter 3600: loss 1.4507
+[2025-02-24 19:15:34,929][INFO] iter 3700: loss 1.4566
+[2025-02-24 19:15:40,109][INFO] iter 3800: loss 1.4390
+[2025-02-24 19:15:45,560][INFO] iter 3900: loss 1.4589
+[2025-02-24 19:16:51,540][INFO] step 4000: train loss 1.4446, val loss 1.4430
+[2025-02-24 19:16:51,541][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:16:51,672][INFO] iter 4000: loss 1.4559
+[2025-02-24 19:16:56,937][INFO] iter 4100: loss 1.4398
+[2025-02-24 19:17:02,063][INFO] iter 4200: loss 1.4369
+[2025-02-24 19:17:07,411][INFO] iter 4300: loss 1.4365
+[2025-02-24 19:17:12,554][INFO] iter 4400: loss 1.4172
+[2025-02-24 19:17:17,845][INFO] iter 4500: loss 1.4348
+[2025-02-24 19:17:23,015][INFO] iter 4600: loss 1.4357
+[2025-02-24 19:17:28,364][INFO] iter 4700: loss 1.4448
+[2025-02-24 19:17:33,548][INFO] iter 4800: loss 1.4564
+[2025-02-24 19:17:38,738][INFO] iter 4900: loss 1.4212
+[2025-02-24 19:18:46,233][INFO] step 5000: train loss 1.4308, val loss 1.4280
+[2025-02-24 19:18:46,233][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:18:46,341][INFO] iter 5000: loss 1.4392
+[2025-02-24 19:18:51,756][INFO] iter 5100: loss 1.4467
+[2025-02-24 19:18:56,880][INFO] iter 5200: loss 1.4147
+[2025-02-24 19:19:02,013][INFO] iter 5300: loss 1.4389
+[2025-02-24 19:19:07,586][INFO] iter 5400: loss 1.4330
+[2025-02-24 19:19:12,747][INFO] iter 5500: loss 1.4372
+[2025-02-24 19:19:18,096][INFO] iter 5600: loss 1.4126
+[2025-02-24 19:19:23,275][INFO] iter 5700: loss 1.4103
+[2025-02-24 19:19:28,724][INFO] iter 5800: loss 1.4106
+[2025-02-24 19:19:33,912][INFO] iter 5900: loss 1.4121
+[2025-02-24 19:20:40,974][INFO] step 6000: train loss 1.4185, val loss 1.4210
+[2025-02-24 19:20:40,975][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:20:41,083][INFO] iter 6000: loss 1.4366
+[2025-02-24 19:20:46,237][INFO] iter 6100: loss 1.4279
+[2025-02-24 19:20:51,539][INFO] iter 6200: loss 1.4116
+[2025-02-24 19:20:56,671][INFO] iter 6300: loss 1.3952
+[2025-02-24 19:21:01,830][INFO] iter 6400: loss 1.3926
+[2025-02-24 19:21:07,275][INFO] iter 6500: loss 1.4322
+[2025-02-24 19:21:12,439][INFO] iter 6600: loss 1.4163
+[2025-02-24 19:21:17,929][INFO] iter 6700: loss 1.4106
+[2025-02-24 19:21:23,106][INFO] iter 6800: loss 1.4166
+[2025-02-24 19:21:28,333][INFO] iter 6900: loss 1.3960
+[2025-02-24 19:22:34,598][INFO] step 7000: train loss 1.4111, val loss 1.4124
+[2025-02-24 19:22:34,599][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:22:34,707][INFO] iter 7000: loss 1.4144
+[2025-02-24 19:22:40,029][INFO] iter 7100: loss 1.4033
+[2025-02-24 19:22:45,161][INFO] iter 7200: loss 1.4214
+[2025-02-24 19:22:50,450][INFO] iter 7300: loss 1.4013
+[2025-02-24 19:22:55,587][INFO] iter 7400: loss 1.4114
+[2025-02-24 19:23:00,740][INFO] iter 7500: loss 1.3891
+[2025-02-24 19:23:06,032][INFO] iter 7600: loss 1.4155
+[2025-02-24 19:23:11,202][INFO] iter 7700: loss 1.4206
+[2025-02-24 19:23:16,680][INFO] iter 7800: loss 1.4055
+[2025-02-24 19:23:21,922][INFO] iter 7900: loss 1.4050
+[2025-02-24 19:24:28,583][INFO] step 8000: train loss 1.4043, val loss 1.4051
+[2025-02-24 19:24:28,584][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:24:28,690][INFO] iter 8000: loss 1.3965
+[2025-02-24 19:24:33,830][INFO] iter 8100: loss 1.4182
+[2025-02-24 19:24:39,070][INFO] iter 8200: loss 1.4091
+[2025-02-24 19:24:44,335][INFO] iter 8300: loss 1.4031
+[2025-02-24 19:24:49,568][INFO] iter 8400: loss 1.4059
+[2025-02-24 19:24:54,716][INFO] iter 8500: loss 1.3922
+[2025-02-24 19:24:59,915][INFO] iter 8600: loss 1.3960
+[2025-02-24 19:25:05,182][INFO] iter 8700: loss 1.4025
+[2025-02-24 19:25:10,363][INFO] iter 8800: loss 1.3777
+[2025-02-24 19:25:15,935][INFO] iter 8900: loss 1.4058
+[2025-02-24 19:26:21,964][INFO] step 9000: train loss 1.4005, val loss 1.3983
+[2025-02-24 19:26:21,965][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:26:22,097][INFO] iter 9000: loss 1.4084
+[2025-02-24 19:26:27,400][INFO] iter 9100: loss 1.3710
+[2025-02-24 19:26:32,523][INFO] iter 9200: loss 1.4067
+[2025-02-24 19:26:37,671][INFO] iter 9300: loss 1.4029
+[2025-02-24 19:26:42,814][INFO] iter 9400: loss 1.3973
+[2025-02-24 19:26:47,966][INFO] iter 9500: loss 1.3989
+[2025-02-24 19:26:53,137][INFO] iter 9600: loss 1.3908
+[2025-02-24 19:26:58,393][INFO] iter 9700: loss 1.3985
+[2025-02-24 19:27:03,720][INFO] iter 9800: loss 1.4147
+[2025-02-24 19:27:08,908][INFO] iter 9900: loss 1.4038
+[2025-02-24 19:28:14,660][INFO] step 10000: train loss 1.3966, val loss 1.3959
+[2025-02-24 19:28:14,660][INFO] saving checkpoint to out/simple_graph_1_1_120_500_path_unseentargets_alledges
+[2025-02-24 19:28:14,766][INFO] iter 10000: loss 1.3847
