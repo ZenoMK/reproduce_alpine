@@ -209,6 +209,7 @@ if __name__ == "__main__":
 
     write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt'))
     write_dataset(test_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/test.txt'))
+    print(os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt'))
     nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/path_graph.graphml'))
 
 
