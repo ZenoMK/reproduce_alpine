@@ -22,6 +22,7 @@ import math
 import pickle
 from contextlib import nullcontext
 import argparse
+import matplotlib.pyplot as plt
 
 
 import numpy as np
@@ -351,6 +352,14 @@ running_mfu = -1.0
 accuracy = []
 corrects = []
 totals = []
+train_losses = []
+val_losses = []
+plot_interval = 100  # Update plot every 100 steps
+
+# Set up real-time plotting
+plt.ion()  # Turn on interactive mode
+fig, ax = plt.subplots(figsize=(10, 5))
+
 while True:
     
     # determine and set the learning rate for this iteration
@@ -429,6 +438,10 @@ while True:
     dt = t1 - t0
     t0 = t1
     if iter_num % log_interval == 0 and master_process:
+        losses = estimate_loss()
+        train_losses.append(losses['train'])
+        val_losses.append(losses['val'])
+
         lossf = loss.item() * gradient_accumulation_steps
         if local_iter_num >= 5: # let the training loop settle a bit
             mfu = raw_model.estimate_mfu(batch_size * gradient_accumulation_steps, dt)
@@ -436,6 +449,17 @@ while True:
         print(f"iter {iter_num}: loss {lossf:.4f}, time {dt*1000:.2f}ms, mfu {running_mfu*100:.2f}%")
         logger.info(f"iter {iter_num}: loss {lossf:.4f}")
         open_and_append(log_file_name, f"iter {iter_num}: loss {lossf:.4f}")
+    if iter_num % plot_interval == 0 and master_process and iter_num > 0:
+        ax.clear()
+        ax.plot(range(len(train_losses)), train_losses, label="Training Loss", color='blue')
+        ax.plot(range(len(val_losses)), val_losses, label="Validation Loss", color='red')
+        ax.set_xlabel("Evaluation Steps")
+        ax.set_ylabel("Loss")
+        ax.set_title("Training & Validation Loss Over Time")
+        ax.legend()
+        ax.grid()
+        plt.draw()
+        plt.pause(0.1)
     iter_num += 1
     local_iter_num += 1
 
