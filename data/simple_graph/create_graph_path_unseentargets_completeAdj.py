@@ -74,10 +74,15 @@ def create_dataset(i):
     train_num_per_pair = max(i, 1)
 
     # Ingnore targets with out-degree 0: we can never put them into train set
-    for target_node in test_targets:
+    for target_node in list(test_targets):
+        # if test target has out-degree 0, move it to train targets
         if random_digraph.out_degree(target_node) == 0:
+            test_targets.remove(target_node)
             for source_node in range(target_node):
-                data[source_node][target_node] = 0
+                if data[source_node][target_node] == -1:
+                    data[source_node][target_node] = 1
+
+    #test_targets = new_targets
 
     for target_node in range(num_nodes):
         for source_node in range(target_node):
@@ -115,7 +120,7 @@ def create_dataset(i):
                     raise AssertionError("Generated path not valid")
             else:
                 # Remove one of the reachable nodes from test_targets and add it to training
-                chosen_node = random.choice(reachable_nodes)
+                chosen_node = random.choice(reachable_nodes) # this currently gives an empty sequence error
                 test_targets.remove(chosen_node)
 
                 # Remove all paths in test_set where chosen_node is the target
@@ -217,7 +222,7 @@ if __name__ == "__main__":
     random_digraph = generate_random_directed_graph(num_nodes, edge_prob)
     reachability, feasible_pairs = obtain_reachability()
 
-    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_path')
+    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_unseentargets_completeAdj')
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
@@ -232,7 +237,7 @@ if __name__ == "__main__":
         for source_node in range(target_node):
             if source_node in reachability[target_node]:
                 # this ensures all edges in the graph that are s-t paths are in the train set
-                if target_node not in test_targets or (include_all_edges and random_digraph.has_edge(source_node, target_node)):
+                if target_node not in test_targets:
                     data[source_node][target_node] = 1
 
 
@@ -248,9 +253,9 @@ if __name__ == "__main__":
     obtain_stats(train_set)
     print('number of source target pairs:', len(test_set))
 
-    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt'))
-    write_dataset(test_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/test.txt'))
-    print(os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt'))
-    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/path_graph.graphml'))
+    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_unseentargets_completeAdj/train_{num_of_paths}.txt'))
+    write_dataset(test_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_unseentargets_completeAdj/test.txt'))
+    print(os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}_path_unseentargets_completeAdj.txt'))
+    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_unseentargets_completeAdj/path_graph.graphml'))
 
 
