@@ -3,12 +3,15 @@ import pickle
 import numpy as np
 import re
 import argparse
+import random
+
 
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')  
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')  
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
 parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
 parser.add_argument('--graph_type', type=str, default='simple_graph')
+parser.add_argument('--shuffled_labels', default = False, action="store_true")
 
 
 
@@ -17,6 +20,7 @@ args = parser.parse_args()
 num_nodes = args.num_nodes
 problem = args.problem
 dataset = args.graph_type
+shuffled_labels = args.shuffled_labels
 
 if(args.num_of_paths == 0):
     train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.txt')
@@ -94,6 +98,26 @@ stoi['[PAD]'] = 0
 itos[0] = '[PAD]'
 stoi['\n'] = 1
 itos[1] = '\n'
+
+if shuffled_labels:
+    # Shuffle values while keeping keys the same (except fixed ones)
+    keys = list(stoi.keys())[:-2]  # Exclude '[PAD]' and '\n'
+    values = list(stoi.values())[:-2]  # Exclude corresponding values
+
+    random.shuffle(values)  # Shuffle values
+
+    # Create shuffled stoi
+    shuffled_stoi = {key: val for key, val in zip(keys, values)}
+    shuffled_stoi['[PAD]'] = 0
+    shuffled_stoi['\n'] = 1
+
+    # Create itos as the inverse of shuffled_stoi
+    shuffled_itos = {v: k for k, v in shuffled_stoi.items()}
+
+    itos = shuffled_itos
+    stoi = shuffled_stoi
+    print("Shuffled stoi:", shuffled_stoi)
+    print("Shuffled itos:", shuffled_itos)
 
 
 

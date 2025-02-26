@@ -179,9 +179,11 @@ for i in tqdm(range(10)):
         f.write(f"Number of wrongs: {wrong}")
 
     # Plotting
+    bins = np.arange(min(correct_lengths + incorrect_lengths),
+                     max(correct_lengths + incorrect_lengths) + 1.5) - 0.5
     plt.figure(figsize=(8, 5))
-    plt.hist(correct_lengths, bins=20, alpha=0.6, label="Correct Paths", color="green")
-    plt.hist(incorrect_lengths, bins=20, alpha=0.6, label="Incorrect Paths", color="red")
+    plt.hist(correct_lengths, bins=bins, alpha=0.6, label="Correct Paths", color="green")
+    plt.hist(incorrect_lengths, bins=bins+0.2, alpha=0.6, label="Incorrect Paths", color="red")
     plt.xlabel("Path Length")
     plt.ylabel("Frequency")
     plt.title("Distribution of Path Lengths (Correct vs Incorrect)")
