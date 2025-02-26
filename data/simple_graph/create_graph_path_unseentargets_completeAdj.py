@@ -96,8 +96,7 @@ def create_dataset(i):
 
             elif data[source_node][target_node] == -1:  # Potential test edge
                 test_path = random_walk(source_node, target_node)
-                if target_node in test_targets and len(test_path) > 1:
-                    test_set.append([source_node, target_node] + test_path)
+                test_set.append([source_node, target_node] + test_path)
 
             else: # those targets with out-degree 0
                 pass
@@ -138,7 +137,7 @@ def create_dataset(i):
 
                 # Run the original procedure
                 additional_path = random_walk(target, chosen_node)
-                train_set.append([source, chosen_node] + additional_path)
+                train_set.append([source, target] + additional_path)
 
     return train_set, test_set
 
