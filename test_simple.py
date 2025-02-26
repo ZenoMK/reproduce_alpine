@@ -188,7 +188,7 @@ for i in tqdm(range(10)):
     plt.ylabel("Frequency")
     plt.title("Distribution of Path Lengths (Correct vs Incorrect)")
     plt.legend()
-    plt.savefig(out_dir + f'pathlen_dist.png')
+    plt.savefig(out_dir + f'pathlen_dist.png', dpi = 400)
 
 
 
