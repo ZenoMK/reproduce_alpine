@@ -1,5 +1,6 @@
 # This file is copied verbatim from: https://github.com/rmaestre/transformers_path_search?tab=readme-ov-file.
 # No authorship is claimed
+import pickle
 
 import tiktoken
 import json
@@ -22,7 +23,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import torch
 import matplotlib.colors as mcolors
-from data.prepare_minigpt_path import encode
+#from data.prepare_minigpt_path import encode
 import os
 
 
@@ -328,7 +329,7 @@ class AttentionVisualizer:
     Utility class to visualize attention weights from a Transformer model.
     """
 
-    def __init__(self, model, tokenizer, out_dir, test_path):
+    def __init__(self, model, tokenizer, out_dir, test_path, meta):
         """
         Initialize the visualizer with a model and tokenizer.
 
@@ -339,6 +340,12 @@ class AttentionVisualizer:
         self.model = model
         self.out_dir = out_dir
         self.test_path = test_path
+        self.meta_path = meta_path
+
+        with open(self.meta_path, 'rb') as f:
+            meta = pickle.load(f)
+
+        self.stoi, self.itos = meta['stoi'], meta['itos']
         #self.tokenizer = tokenizer
 
     def infer_and_visualize_attention(
@@ -392,7 +399,7 @@ class AttentionVisualizer:
                     if problem == "cut":
                         data.simple_graph.prepare_minigpt_cut.encode(path)
                     else:
-                        encoded_input = encode(path)
+                        encoded_input = self.encode(path)
                     encoded_input_tensor = torch.tensor(encoded_input).unsqueeze(0)
                     logits, loss, attn_weights = self.model(encoded_input_tensor, return_attn_weights=True)
                     if attn_weights is None or len(attn_weights) == 0:
@@ -489,6 +496,17 @@ class AttentionVisualizer:
 
         # Add colorbar nd size
         plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+
+    def encode_string(self, s, stonum):
+        s = s.rstrip()
+        ss = s.split(" ")
+        encoded_string = [stonum[ch] for ch in ss]
+        return encoded_string
+
+    def encode(self, s):
+        return self.encode_string(s, self.stoi)
+
+
 
 
 def train_model_simple(

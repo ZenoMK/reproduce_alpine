@@ -101,21 +101,23 @@ itos[1] = '\n'
 
 if shuffled_labels:
     # Shuffle values while keeping keys the same (except fixed ones)
-    keys = list(stoi.keys())[:-2]  # Exclude '[PAD]' and '\n'
-    values = list(stoi.values())[:-2]  # Exclude corresponding values
+    keys = list(stoi.keys()) # Exclude '[PAD]' and '\n'
+    values = list(stoi.values())  # Exclude corresponding values
 
     random.shuffle(values)  # Shuffle values
 
     # Create shuffled stoi
     shuffled_stoi = {key: val for key, val in zip(keys, values)}
-    shuffled_stoi['[PAD]'] = 0
-    shuffled_stoi['\n'] = 1
 
     # Create itos as the inverse of shuffled_stoi
     shuffled_itos = {v: k for k, v in shuffled_stoi.items()}
 
-    itos = shuffled_itos
-    stoi = shuffled_stoi
+    stoi.clear()
+    stoi.update(shuffled_stoi)
+
+    itos.clear()
+    itos.update(shuffled_itos)
+
 
 
 def encode(s):
@@ -158,11 +160,11 @@ meta = {
     'simple_format': simple_format,
     'block_size': block_size,
     'vocab_size': vocab_size,
-    'itos': itos,
-    'stoi': stoi,
+    'itos': itos, #if not shuffled_labels else shuffled_itos,
+    'stoi': stoi #if not shuffled_labels else shuffled_stoi,
 }
-print(stoi)
-print(itos)
+print(meta['itos'])
+print(meta['stoi'])
 
 with open(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
     pickle.dump(meta, f)

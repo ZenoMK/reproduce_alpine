@@ -70,7 +70,7 @@ model.to(device)
 
 tokenizer = tiktoken.get_encoding("gpt2")
 print(type(out_dir))
-viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir, test_path=f'{data_path}/test.txt')
+viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir, test_path=f'{data_path}/test.txt', meta_path=meta_path)
 viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44", problem = "path")
 
 
