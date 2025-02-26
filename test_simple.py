@@ -43,6 +43,8 @@ with open(meta_path, 'rb') as f:
     meta = pickle.load(f)
 
 stoi, itos = meta['stoi'], meta['itos']
+print(stoi)
+print(itos)
 max_new_tokens = meta['block_size']
 top_k = len(itos)
 simple_format = meta['simple_format']

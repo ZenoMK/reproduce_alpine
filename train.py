@@ -236,6 +236,8 @@ if dataset == 'reasoning':
     shortest_paths = get_shortest(p_graph)
     
 stoi, itos = meta['stoi'], meta['itos']
+print(stoi)
+print(itos)
 decode = lambda l: ''.join([itos[i] for i in l])
 
 # model init

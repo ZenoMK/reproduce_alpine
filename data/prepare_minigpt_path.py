@@ -116,9 +116,6 @@ if shuffled_labels:
 
     itos = shuffled_itos
     stoi = shuffled_stoi
-    print("Shuffled stoi:", shuffled_stoi)
-    print("Shuffled itos:", shuffled_itos)
-
 
 
 def encode(s):
@@ -164,7 +161,8 @@ meta = {
     'itos': itos,
     'stoi': stoi,
 }
-
+print(stoi)
+print(itos)
 
 with open(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/meta.pkl'), 'wb') as f:
     pickle.dump(meta, f)
