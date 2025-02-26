@@ -2,7 +2,7 @@
 import os
 
 import tiktoken
-
+import matplotlib.pyplot as plt
 from model import GPTConfig, GPT
 import numpy as np
 import networkx as nx
@@ -162,13 +162,31 @@ for i in tqdm(range(10)):
 
     y_pred = [decode(y[t].tolist()).split('\n')[0] for t in range(batch_size)]
 
+    # Lists to store path lengths
+    correct_lengths = []
+    incorrect_lengths = []
+
     with open(out_dir + f'pred_{typedata}_{ckpt_iter}.txt', 'a') as f:
         for t,item in enumerate(y_pred):
             symbol = check_path(path_graph, item)
+            path_len = len(re.findall(r'\d+', item))
             if(symbol != ""):
+                incorrect_lengths.append(path_len)
                 wrong = wrong + 1
+            else:
+                correct_lengths.append(path_len)
             f.write(item +" % " + symbol + '\n')
         f.write(f"Number of wrongs: {wrong}")
+
+    # Plotting
+    plt.figure(figsize=(8, 5))
+    plt.hist(correct_lengths, bins=20, alpha=0.6, label="Correct Paths", color="green")
+    plt.hist(incorrect_lengths, bins=20, alpha=0.6, label="Incorrect Paths", color="red")
+    plt.xlabel("Path Length")
+    plt.ylabel("Frequency")
+    plt.title("Distribution of Path Lengths (Correct vs Incorrect)")
+    plt.legend()
+    plt.savefig(out_dir + f'pathlen_dist.png')
 
 
 
