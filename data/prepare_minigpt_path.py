@@ -101,13 +101,20 @@ itos[1] = '\n'
 
 if shuffled_labels:
     # Shuffle values while keeping keys the same (except fixed ones)
-    keys = list(stoi.keys()) # Exclude '[PAD]' and '\n'
-    values = list(stoi.values())  # Exclude corresponding values
+    stoi = {str(i): i + 2 for i in range(num_nodes)}
+    stoi['[PAD]'] = 0
+    stoi['\n'] = 1
+
+    # Shuffle values while keeping keys the same (except fixed ones)
+    keys = list(stoi.keys())[:-2]  # Exclude '[PAD]' and '\n'
+    values = list(stoi.values())[:-2]  # Exclude corresponding values
 
     random.shuffle(values)  # Shuffle values
 
     # Create shuffled stoi
     shuffled_stoi = {key: val for key, val in zip(keys, values)}
+    shuffled_stoi['[PAD]'] = 0
+    shuffled_stoi['\n'] = 1
 
     # Create itos as the inverse of shuffled_stoi
     shuffled_itos = {v: k for k, v in shuffled_stoi.items()}
@@ -117,6 +124,9 @@ if shuffled_labels:
 
     itos.clear()
     itos.update(shuffled_itos)
+
+for key, value in stoi.items():
+    assert itos[value] == key
 
 
 
