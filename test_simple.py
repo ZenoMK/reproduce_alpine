@@ -43,8 +43,6 @@ with open(meta_path, 'rb') as f:
     meta = pickle.load(f)
 
 stoi, itos = meta['stoi'], meta['itos']
-print(stoi)
-print(itos)
 max_new_tokens = meta['block_size']
 top_k = len(itos)
 simple_format = meta['simple_format']
@@ -163,6 +161,8 @@ for i in tqdm(range(10)):
     y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
 
     y_pred = [decode(y[t].tolist()).split('\n')[0] for t in range(batch_size)]
+    print(y_pred[0])
+    print(y[t].tolist())
 
     # Lists to store path lengths
     correct_lengths = []
@@ -181,16 +181,16 @@ for i in tqdm(range(10)):
         f.write(f"Number of wrongs: {wrong}")
 
     # Plotting
-    bins = np.arange(min(correct_lengths + incorrect_lengths),
+bins = np.arange(min(correct_lengths + incorrect_lengths),
                      max(correct_lengths + incorrect_lengths) + 1.5) - 0.5
-    plt.figure(figsize=(8, 5))
-    plt.hist(correct_lengths, bins=bins, alpha=0.6, label="Correct Paths", color="green")
-    plt.hist(incorrect_lengths, bins=bins+0.2, alpha=0.6, label="Incorrect Paths", color="red")
-    plt.xlabel("Path Length")
-    plt.ylabel("Frequency")
-    plt.title("Distribution of Path Lengths (Correct vs Incorrect)")
-    plt.legend()
-    plt.savefig(out_dir + f'pathlen_dist.png', dpi = 400)
+plt.figure(figsize=(8, 5))
+plt.hist(correct_lengths, bins=bins, alpha=0.6, label="Correct Paths", color="green")
+plt.hist(incorrect_lengths, bins=bins+0.2, alpha=0.6, label="Incorrect Paths", color="red")
+plt.xlabel("Path Length")
+plt.ylabel("Frequency")
+plt.title("Distribution of Path Lengths (Correct vs Incorrect)")
+plt.legend()
+plt.savefig(out_dir + f'pathlen_dist.png', dpi = 400)
 
 
 
