@@ -1,6 +1,6 @@
 
 import os
-
+from collections import Counter
 import tiktoken
 import matplotlib.pyplot as plt
 from model import GPTConfig, GPT
@@ -181,16 +181,29 @@ for i in tqdm(range(10)):
         f.write(f"Number of wrongs: {wrong}")
 
     # Plotting
-bins = np.arange(min(correct_lengths + incorrect_lengths),
-                     max(correct_lengths + incorrect_lengths) + 1.5) - 0.5
+correct_counts = Counter(correct_lengths)
+incorrect_counts = Counter(incorrect_lengths)
+
+# Get all unique path lengths
+all_lengths = set(correct_counts.keys()).union(incorrect_counts.keys())
+
+# Compute proportion of incorrect paths per length
+proportions = {
+    length: correct_counts[length] / (correct_counts[length] + incorrect_counts[length])
+    for length in all_lengths
+}
+
+# Sorting lengths for plotting
+sorted_lengths = sorted(proportions.keys())
+sorted_proportions = [proportions[length] for length in sorted_lengths]
+
+# Plotting
 plt.figure(figsize=(8, 5))
-plt.hist(correct_lengths, bins=bins, alpha=0.6, label="Correct Paths", color="green")
-plt.hist(incorrect_lengths, bins=bins+0.2, alpha=0.6, label="Incorrect Paths", color="red")
+plt.bar(sorted_lengths, sorted_proportions, color="red", alpha=0.7)
 plt.xlabel("Path Length")
-plt.ylabel("Frequency")
-plt.title("Distribution of Path Lengths (Correct vs Incorrect)")
-plt.legend()
-plt.savefig(out_dir + f'pathlen_dist.png', dpi = 400)
-
-
+plt.ylabel("Proportion of Incorrect Paths")
+plt.title("Proportion of Incorrect Paths per Path Length")
+plt.xticks(sorted_lengths)
+plt.ylim(0, 1)  # Proportion ranges from 0 to 1
+plt.savefig(out_dir + f'pathlen_proportion.png', dpi=400)
 
