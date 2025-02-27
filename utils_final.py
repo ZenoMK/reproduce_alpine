@@ -329,7 +329,7 @@ class AttentionVisualizer:
     Utility class to visualize attention weights from a Transformer model.
     """
 
-    def __init__(self, model, tokenizer, out_dir, test_path, meta):
+    def __init__(self, model, tokenizer, out_dir, test_path, meta_path):
         """
         Initialize the visualizer with a model and tokenizer.
 
