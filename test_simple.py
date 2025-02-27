@@ -18,7 +18,7 @@ from utils_final import (
 parser = argparse.ArgumentParser()
 parser.add_argument('--ckpt_iter', type=int, default=10000)
 parser.add_argument('--graph_type', type=str, default='simple_graph')
-parser.add_argument('--config', type=str, default='1_1_120')
+parser.add_argument('--config', type=str, default='6_6_120')
 parser.add_argument('--temperature', type=float, default=1)
 parser.add_argument('--device', type=str, default='cpu')
 parser.add_argument('--num_nodes', type=int, default=100)
@@ -199,10 +199,10 @@ sorted_proportions = [proportions[length] for length in sorted_lengths]
 
 # Plotting
 plt.figure(figsize=(8, 5))
-plt.bar(sorted_lengths, sorted_proportions, color="red", alpha=0.7)
+plt.bar(sorted_lengths, sorted_proportions, color="green", alpha=0.7)
 plt.xlabel("Path Length")
-plt.ylabel("Proportion of Incorrect Paths")
-plt.title("Proportion of Incorrect Paths per Path Length")
+plt.ylabel("Proportion of Correct Paths")
+plt.title("Proportion of Correct Paths per Path Length")
 plt.xticks(sorted_lengths)
 plt.ylim(0, 1)  # Proportion ranges from 0 to 1
 plt.savefig(out_dir + f'pathlen_proportion.png', dpi=400)
