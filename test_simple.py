@@ -162,7 +162,7 @@ for i in tqdm(range(10)):
 
     y_pred = [decode(y[t].tolist()).split('\n')[0] for t in range(batch_size)]
     print(y_pred[0])
-    print(y[t].tolist())
+    print(y[0].tolist())
 
     # Lists to store path lengths
     correct_lengths = []
