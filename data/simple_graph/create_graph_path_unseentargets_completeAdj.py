@@ -113,9 +113,9 @@ def create_dataset(i):
 
             if non_test_reachable_nodes: # if there are any nodes reachable from target that aren't test targets
                 chosen_node = random.choice(non_test_reachable_nodes)
-                additional_path = random_walk(chosen_node, target)
-                train_set.append([source, target] + additional_path)
-                if not nx.is_path(random_digraph, [source, target] + additional_path):
+                additional_path = random_walk(target, chosen_node)
+                train_set.append([source, chosen_node, source] + additional_path)
+                if not nx.is_path(random_digraph, [source] + additional_path):
                     raise AssertionError("Generated path not valid")
             else:
                 # Remove one of the reachable nodes from test_targets and add it to training
@@ -137,7 +137,9 @@ def create_dataset(i):
 
                 # Run the original procedure
                 additional_path = random_walk(target, chosen_node)
-                train_set.append([source, target] + additional_path)
+                train_set.append([source, chosen_node, source] + additional_path)
+                if not nx.is_path(random_digraph, [source] + additional_path):
+                    raise AssertionError("Generated path not valid")
 
     return train_set, test_set
 
