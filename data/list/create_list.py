@@ -6,7 +6,7 @@ def generate_random_list():
     """Generate a random list of integers with length between 5 and 100,
        followed by '%' and the reversed list."""
     length = random.randint(5, 100)
-    rand_list = [random.randint(0, 1000) for _ in range(length)]  # Generate random integers (0-1000)
+    rand_list = [random.randint(0, 999) for _ in range(length)]  # Generate random integers (0-1000)
     reversed_list = list(reversed(rand_list))
     return rand_list, reversed_list
 
