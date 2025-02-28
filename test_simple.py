@@ -18,7 +18,7 @@ from utils_final import (
 parser = argparse.ArgumentParser()
 parser.add_argument('--ckpt_iter', type=int, default=10000)
 parser.add_argument('--graph_type', type=str, default='simple_graph')
-parser.add_argument('--config', type=str, default='1_1_120')
+parser.add_argument('--config', type=str, default='6_6_120')
 parser.add_argument('--temperature', type=float, default=1)
 parser.add_argument('--device', type=str, default='cpu')
 parser.add_argument('--num_nodes', type=int, default=100)
