@@ -90,7 +90,7 @@ vocab_size = num_nodes+3
 stoi = {}
 itos = {}
 
-for i in range(1001):
+for i in range(1000):
     stoi[str(i)] = i+3
     itos[i+3] = str(i)
 

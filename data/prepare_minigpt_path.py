@@ -83,7 +83,7 @@ def decode_string(l, numtos):
 
 # get all the unique characters that occur in this text
 chars = sorted(list(find_characters(all_data)))
-vocab_size = num_nodes+3
+vocab_size = num_nodes+2
 
 
 # create a mapping from characters to integers
