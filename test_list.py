@@ -131,11 +131,9 @@ wrong = 0
 correct_lengths = []
 incorrect_lengths = []
 
-for i in tqdm(range(1), desc="Generating and validating outputs"):
+for i in tqdm(range(10), desc="Generating and validating outputs"):
     x = encode_texts[ix]
-    print(x)
     y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
-    print(y)
     PAD_TOKEN = 0  # or whatever your model's padding token is
     y = [[token for token in y[t].tolist() if token != PAD_TOKEN] for t in range(batch_size)]
     y_pred = [decode(y[t]).split('\n')[0] for t in range(batch_size)]
