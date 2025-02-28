@@ -2,11 +2,11 @@ import os
 import random
 import argparse
 
-def generate_random_list():
+def generate_random_list(num_nodes):
     """Generate a random list of integers with length between 5 and 100,
        followed by '%' and the reversed list."""
-    length = random.randint(5, 100)
-    rand_list = [random.randint(0, 999) for _ in range(length)]  # Generate random integers (0-1000)
+    length = random.randint(5, 20)
+    rand_list = [random.randint(0, num_nodes - 1) for _ in range(length)]  # Generate random integers (0-1000)
     reversed_list = list(reversed(rand_list))
     return rand_list, reversed_list
 
@@ -14,11 +14,11 @@ def format_list(rand_list, reversed_list):
     """Format the list as a string with a '%' separator."""
     return " ".join(map(str, rand_list)) + " % " + " ".join(map(str, reversed_list)) + "\n"
 
-def write_dataset(num_samples, file_name):
+def write_dataset(num_samples, file_name, num_nodes):
     """Generate and write multiple formatted list to a file."""
     with open(file_name, "w") as file:
         for _ in range(num_samples):
-            rand_list, reversed_list = generate_random_list()
+            rand_list, reversed_list = generate_random_list(num_nodes)
             file.write(format_list(rand_list, reversed_list))
 
 if __name__ == "__main__":
@@ -37,8 +37,8 @@ if __name__ == "__main__":
     test_file = os.path.join(folder_name, 'test.txt')
 
     # Generate and write datasets
-    write_dataset(args.num_samples, train_file)
-    write_dataset(args.num_samples // 5, test_file)  # Test set is smaller
+    write_dataset(args.num_samples, train_file, args.num_nodes)
+    write_dataset(args.num_samples // 5, test_file, args.num_nodes)  # Test set is smaller
 
     print(f"Generated {args.num_samples} training samples in {train_file}")
     print(f"Generated {args.num_samples // 5} test samples in {test_file}")
