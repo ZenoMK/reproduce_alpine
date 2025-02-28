@@ -5,7 +5,7 @@ import argparse
 def generate_random_list(num_nodes):
     """Generate a random list of integers with length between 5 and 100,
        followed by '%' and the reversed list."""
-    length = random.randint(5, 20)
+    length = 20
     rand_list = [random.randint(0, num_nodes - 1) for _ in range(length)]  # Generate random integers (0-1000)
     reversed_list = list(reversed(rand_list))
     return rand_list, reversed_list
