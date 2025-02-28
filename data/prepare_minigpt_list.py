@@ -63,7 +63,7 @@ def get_block_size(s):
     bs = 0
     for st in split_text:
         if(st != ""):
-            enc_str = encode(st) + [1]
+            enc_str = encode(st.rstrip()) + [1]
             bs = max(bs, len(enc_str))
     return bs
 
