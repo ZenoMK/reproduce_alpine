@@ -358,7 +358,7 @@ train_losses = []
 val_losses = []
 plot_interval = 100  # Update plot every 100 steps
 
-# Initialize lists to store losses
+# Initialize list to store losses
 train_losses = []
 val_losses = []
 

@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description='Create the dataset based on the gi
 parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
 parser.add_argument("--problem", type=str, default = "list", help ="Which algorithmic problem (path/cut)")
-parser.add_argument('--graph_type', type=str, default='lists')
+parser.add_argument('--graph_type', type=str, default='list')
 parser.add_argument('--shuffled_labels', default = False, action="store_true")
 
 

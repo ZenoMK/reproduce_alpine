@@ -15,16 +15,16 @@ def format_list(rand_list, reversed_list):
     return " ".join(map(str, rand_list)) + " % " + " ".join(map(str, reversed_list)) + "\n"
 
 def write_dataset(num_samples, file_name):
-    """Generate and write multiple formatted lists to a file."""
+    """Generate and write multiple formatted list to a file."""
     with open(file_name, "w") as file:
         for _ in range(num_samples):
             rand_list, reversed_list = generate_random_list()
             file.write(format_list(rand_list, reversed_list))
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Generate random lists and write them to files.')
+    parser = argparse.ArgumentParser(description='Generate random list and write them to files.')
     parser.add_argument('--num_samples', type=int, default=10000, help='Number of samples to generate')
-    parser.add_argument('--num_nodes', type=int, default=100, help='Used for file path consistency')
+    parser.add_argument('--num_nodes', type=int, default=1000, help='Used for file path consistency')
     parser.add_argument('--num_of_paths', type=int, default=20, help='Used for file naming consistency')
 
     args = parser.parse_args()

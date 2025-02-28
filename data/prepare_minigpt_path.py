@@ -7,7 +7,7 @@ import random
 
 
 parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')  
-parser.add_argument('--num_nodes', type=int, default=100, help='Number of nodes in the graph')  
+parser.add_argument('--num_nodes', type=int, default=1000, help='Number of nodes in the graph')
 parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
 parser.add_argument("--problem", type=str, default = "path", help ="Which algorithmic problem (path/cut)")
 parser.add_argument('--graph_type', type=str, default='simple_graph')
@@ -83,7 +83,7 @@ def decode_string(l, numtos):
 
 # get all the unique characters that occur in this text
 chars = sorted(list(find_characters(all_data)))
-vocab_size = num_nodes+2
+vocab_size = num_nodes+3
 
 
 # create a mapping from characters to integers
