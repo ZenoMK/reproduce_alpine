@@ -52,7 +52,7 @@ def process_reasoning(s):
     ret = []
     for st in split_text:
         if(st != ""):
-            enc_str = encode(st) + [1]
+            enc_str = encode(st.rstrip()) + [1]
             ret += enc_str +[0] * (block_size + 1 - len(enc_str))
     return ret
 
