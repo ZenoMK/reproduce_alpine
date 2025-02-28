@@ -13,7 +13,7 @@ parser.add_argument('--ckpt_iter', type=int, default=10000, help='Checkpoint ite
 parser.add_argument('--data_type', type=str, default='list', help='Graph type for consistency')
 args = parser.parse_args()
 
-dataset = args.graph_type
+dataset = 'list'
 num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 ckpt_iter = args.ckpt_iter
