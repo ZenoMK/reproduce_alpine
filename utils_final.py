@@ -387,12 +387,12 @@ class AttentionVisualizer:
         with open(self.test_path, "r") as file:
             for line in file:
                 numbers = line.split()
-                if len(numbers) == 8:  # Check if the path length is 8
-                    paths.append(" ".join(numbers))
+                paths.append(" ".join(numbers))
+                print(numbers)
 
         for layer in layers:
             for head in heads:
-                all_attns = np.zeros((8,8))
+                all_attns = np.zeros((21,21))
 
                 # average the attention over all length-8 paths
                 for path in paths:
@@ -415,6 +415,7 @@ class AttentionVisualizer:
                     all_attns = np.add(all_attns, attn_matrix)
 
                 all_attns = np.divide(all_attns, len(paths))
+                print(len(paths))
                 self.plot_attention(all_attns,head,layer)
 
 

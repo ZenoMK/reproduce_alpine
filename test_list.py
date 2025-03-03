@@ -1,4 +1,6 @@
 import os
+
+import tiktoken
 import torch
 import argparse
 import numpy as np
@@ -11,6 +13,7 @@ from model import GPTConfig, GPT
 from utils_final import (
     AttentionVisualizer
 )
+import tiktoken
 
 # Argument parsing
 parser = argparse.ArgumentParser(description="Transformer Output Validation")
@@ -21,6 +24,7 @@ parser.add_argument('--temperature', type=float, default=1, help="Sampling tempe
 parser.add_argument('--device', type=str, default='cpu', help="Device (cpu/gpu)")
 parser.add_argument('--num_nodes', type=int, default=100, help="Number of nodes")
 parser.add_argument('--num_of_paths', type=int, default=20, help="Number of paths")
+parser.add_argument('--problem', type=str, default='path',help='Just for consistency')
 
 args = parser.parse_args()
 dataset = args.graph_type
@@ -30,7 +34,7 @@ temperature = args.temperature
 num_nodes = args.num_nodes
 num_of_paths = args.num_of_paths
 config = args.config
-
+problem=args.problem
 # Define paths
 data_path = f'data/{dataset}/{num_nodes}_list/'
 out_dir = f'out/{dataset}_{config}_{num_nodes}_list/'
@@ -122,6 +126,12 @@ batch_size = 1000
 ix = torch.randint(len(encode_texts), (batch_size,))
 
 pred_file = os.path.join(out_dir, f'pred_{typedata}_{ckpt_iter}.txt')
+
+data_path = f'data/list/{num_nodes}_list'
+tokenizer = tiktoken.get_encoding("gpt2")
+meta_path = f'{data_path}/meta.pkl'
+viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir, test_path=f'{data_path}/test.txt', meta_path=meta_path)
+viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44", problem = "path")
 
 # Initialize empty file
 with open(pred_file, 'w') as f:
