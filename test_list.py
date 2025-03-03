@@ -44,7 +44,7 @@ with open(meta_path, 'rb') as f:
 stoi, itos = meta['stoi'], meta['itos']
 max_new_tokens = meta['block_size']
 top_k = len(itos)
-simple_format = meta['simple_format']
+simple_format = True
 
 # Load model checkpoint
 ckpt_path = os.path.join(out_dir, f'{ckpt_iter}_ckpt_20.pt')
@@ -141,7 +141,8 @@ for i in tqdm(range(10), desc="Generating and validating outputs"):
     with open(pred_file, 'a') as f:
         for t, item in enumerate(y_pred):
             original = texts[ix[t]].split()
-            generated = item.split()
+            generated_pre = item.split(" % ")[1]
+            generated = generated_pre.split()
             validation = validate_output(original, generated)
             path_len = len(original)
 
@@ -151,7 +152,7 @@ for i in tqdm(range(10), desc="Generating and validating outputs"):
             else:
                 correct_lengths.append(path_len)
 
-            f.write(f"{texts[ix[t]]} % {item} % {validation}\n")
+            f.write(f"{texts[ix[t]]} % {generated_pre} % {validation}\n")
 
         f.write(f"Number of wrongs: {wrong}\n")
 
