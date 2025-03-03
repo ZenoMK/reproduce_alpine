@@ -7,8 +7,8 @@ def generate_random_list(num_nodes):
        followed by '%' and the reversed list."""
     length = 20
     rand_list = [random.randint(0, num_nodes - 1) for _ in range(length)]
-    #rand_list = sorted(rand_list)# Generate random integers (0-1000)
-    #reversed_list = list(reversed(rand_list))
+    rand_list = sorted(rand_list)# Generate random integers (0-1000)
+    reversed_list = list(reversed(rand_list))
     return rand_list, rand_list
 
 def format_list(rand_list, reversed_list):

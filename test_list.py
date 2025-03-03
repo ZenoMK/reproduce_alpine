@@ -141,18 +141,25 @@ for i in tqdm(range(10), desc="Generating and validating outputs"):
     with open(pred_file, 'a') as f:
         for t, item in enumerate(y_pred):
             original = texts[ix[t]].split()
-            generated_pre = item.split(" % ")[1]
-            generated = generated_pre.split()
-            validation = validate_output(original, generated)
-            path_len = len(original)
-
-            if validation == "incorrect":
-                incorrect_lengths.append(path_len)
+            print(item)
+            try:
+                generated_pre = item.split(" % ")[1]
+            except:
+                f.write(f"{texts[ix[t]]} % {generated_pre} % incorrect \n")
                 wrong += 1
+                continue
             else:
-                correct_lengths.append(path_len)
+                generated = generated_pre.split()
+                validation = validate_output(original, generated)
+                path_len = len(original)
 
-            f.write(f"{texts[ix[t]]} % {generated_pre} % {validation}\n")
+                if validation == "incorrect":
+                    incorrect_lengths.append(path_len)
+                    wrong += 1
+                else:
+                    correct_lengths.append(path_len)
+
+                f.write(f"{texts[ix[t]]} % {generated_pre} % {validation}\n")
 
         f.write(f"Number of wrongs: {wrong}\n")
 
