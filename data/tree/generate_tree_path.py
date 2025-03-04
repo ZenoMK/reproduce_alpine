@@ -6,12 +6,20 @@ import numpy as np
 
 
 def generate_random_rooted_tree(num_nodes):
+    if num_nodes < 3:
+        raise ValueError("Tree must have at least 3 nodes (1 root, 1 intermediate, 1 leaf)")
+
     G = nx.DiGraph()
     G.add_node(0)  # Root node
 
-    for i in range(1, num_nodes):
-        parent = random.randint(0, i - 1)  # Ensure tree structure
-        G.add_edge(parent, i)
+    intermediate_nodes = list(range(1, (num_nodes // 2) + 1))
+    leaf_nodes = list(range((num_nodes // 2) + 1, num_nodes))
+
+    # Ensure each intermediate node connects to exactly one leaf
+    for i, intermediate in enumerate(intermediate_nodes):
+        if i < len(leaf_nodes):
+            G.add_edge(0, intermediate)  # Connect root to intermediate node
+            G.add_edge(intermediate, leaf_nodes[i])  # Connect intermediate to one unique leaf
 
     return G
 
