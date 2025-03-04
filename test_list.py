@@ -120,6 +120,7 @@ encode_texts_padded = [seq + [0] * (max_len - len(seq)) for seq in encode_texts]
 
 
 encode_texts = torch.tensor(encode_texts_padded, dtype=torch.long, device=device)
+#texts = torch.tensor(texts, dtype=torch.long, device=device)
 
 # Generate and validate outputs
 batch_size = 1000
@@ -143,15 +144,18 @@ incorrect_lengths = []
 
 for i in tqdm(range(10), desc="Generating and validating outputs"):
     x = encode_texts[ix]
+    #print(texts[ix])
     y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
     PAD_TOKEN = 0  # or whatever your model's padding token is
     y = [[token for token in y[t].tolist() if token != PAD_TOKEN] for t in range(batch_size)]
     y_pred = [decode(y[t]).split('\n')[0] for t in range(batch_size)]
+    print(decode(y[0]).split('\n')[0])
+    print(x[0])
 
     with open(pred_file, 'a') as f:
         for t, item in enumerate(y_pred):
             original = texts[ix[t]].split()
-            print(item)
+            #print(item)
             try:
                 generated_pre = item.split(" % ")[1]
             except:

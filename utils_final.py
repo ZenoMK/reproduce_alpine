@@ -384,15 +384,16 @@ class AttentionVisualizer:
         #self.model(encoded_input_tensor)
         paths = []
 
-        with open(self.test_path, "r") as file:
+        with (open(self.test_path, "r") as file):
             for line in file:
                 numbers = line.split()
+                numbers.remove("%")
                 paths.append(" ".join(numbers))
                 print(numbers)
 
         for layer in layers:
             for head in heads:
-                all_attns = np.zeros((21,21))
+                all_attns = np.zeros((40,40))
 
                 # average the attention over all length-8 paths
                 for path in paths:
