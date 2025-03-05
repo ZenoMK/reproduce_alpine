@@ -142,7 +142,7 @@ wrong = 0
 correct_lengths = []
 incorrect_lengths = []
 
-for i in tqdm(range(10), desc="Generating and validating outputs"):
+for i in tqdm(range(5), desc="Generating and validating outputs"):
     x = encode_texts[ix]
     #print(texts[ix])
     y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
