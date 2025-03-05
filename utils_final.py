@@ -387,12 +387,12 @@ class AttentionVisualizer:
         with (open(self.test_path, "r") as file):
             for line in file:
                 numbers = line.split()
-                if len(numbers) == 4:
+                if len(numbers) == 5:
                     paths.append(" ".join(numbers))
 
         for layer in layers:
             for head in heads:
-                all_attns = np.zeros((4,4))
+                all_attns = np.zeros((5,5))
 
                 # average the attention over all length-8 paths
                 for path in paths:
@@ -421,7 +421,7 @@ class AttentionVisualizer:
 
 
         # Create a multiplot figure
-        fig, axes = plt.subplots(len(layers), len(heads), figsize=(4, 4))
+        fig, axes = plt.subplots(len(layers), len(heads), figsize=(5, 5))
 
         # Handle case where axes may not be a 2D array
         if len(layers) == 1 and len(heads) == 1:
