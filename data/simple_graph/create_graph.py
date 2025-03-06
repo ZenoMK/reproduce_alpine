@@ -7,7 +7,7 @@ import numpy
 def generate_random_directed_graph(num_nodes, edge_prob):
     # Create an empty directed graph
     G = nx.DiGraph()
-    
+
     # Add nodes to the graph
     for i in range(num_nodes):
         G.add_node(i)
@@ -21,20 +21,20 @@ def generate_random_directed_graph(num_nodes, edge_prob):
             else:
                 if i != j and random.random() < edge_prob:
                     G.add_edge(i, j)
+
     return G
 
-def get_reachable_nodes(G, target_node):  
-    # Get the transitive closure of the graph  
-    TC = nx.transitive_closure(G)  
+def get_reachable_nodes(TC, target_node):
+
     # Find the predecessors in the transitive closure (nodes that can reach the target_node)  
     reachable_from = TC.predecessors(target_node)  
     return list(reachable_from)
 
-def obtain_reachability():
+def obtain_reachability(TC):
     reachability = {}  
     pairs = 0
     for node in random_digraph.nodes():  
-        reachability[node] = get_reachable_nodes(random_digraph, node)
+        reachability[node] = get_reachable_nodes(TC, node)
         pairs += len(reachability[node])
     return reachability, pairs
 
@@ -149,9 +149,10 @@ if __name__ == "__main__":
     num_of_paths = args.num_of_paths
 
     random_digraph = generate_random_directed_graph(num_nodes, edge_prob)
-    reachability, feasible_pairs = obtain_reachability()
+    TC = nx.transitive_closure(random_digraph)
+    reachability, feasible_pairs = obtain_reachability(TC)
 
-    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}')
+    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_path')
     if not os.path.exists(folder_name):  
         os.makedirs(folder_name)
 
@@ -175,8 +176,8 @@ if __name__ == "__main__":
     obtain_stats(train_set)
     print('number of source target pairs:', len(test_set))
 
-    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}/train_{num_of_paths}.txt') )
-    write_dataset(test_set, os.path.join(os.path.dirname(__file__),  f'{num_nodes}/test.txt') )
-    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}/path_graph.graphml') )
+    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt') )
+    write_dataset(test_set, os.path.join(os.path.dirname(__file__),  f'{num_nodes}_path/test.txt') )
+    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/path_graph.graphml') )
 
     

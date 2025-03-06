@@ -1,0 +1,182 @@
+import os
+import pickle
+import numpy as np
+import re
+import argparse
+import random
+
+
+parser = argparse.ArgumentParser(description='Create the dataset based on the given parameters.')
+parser.add_argument('--num_nodes', type=int, default=1000, help='Number of nodes in the graph')
+parser.add_argument('--num_of_paths', type=int, default=20, help='Number of paths per pair nodes in training dataset')
+parser.add_argument("--problem", type=str, default = "list", help ="Which algorithmic problem (path/cut)")
+parser.add_argument('--graph_type', type=str, default='list')
+parser.add_argument('--shuffled_labels', default = False, action="store_true")
+
+
+
+args = parser.parse_args()
+
+num_nodes = args.num_nodes
+problem = args.problem
+dataset = args.graph_type
+shuffled_labels = args.shuffled_labels
+
+if(args.num_of_paths == 0):
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
+else:
+    train_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.txt')
+    val_file_path = os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/test.txt')
+    print(train_file_path)
+# test_file_path = os.path.join(os.path.dirname(__file__), 'test.txt')
+
+with open(train_file_path, 'r') as f:
+    train_data = f.read()
+print(f"length of train dataset in characters: {len(train_data):,}")
+
+with open(val_file_path, 'r') as f:
+    val_data = f.read()
+print(f"length of val dataset in characters: {len(val_data):,}")
+
+all_data = train_data + val_data
+
+def find_characters(data_string):
+    pattern = r'\d+|\D'
+    matches = re.findall(pattern, data_string)
+    return set(matches)
+
+def process_reasoning(s):
+    split_text = s.split('\n')
+    #split_text = [s + '\n' for s in split_text if s != ""]
+    ret = []
+    for st in split_text:
+        if(st != ""):
+            enc_str = encode(st) + [1]
+            ret += enc_str +[0] * (block_size + 1 - len(enc_str))
+    return ret
+
+def get_block_size(s):
+    split_text = s.split('\n')
+    #split_text = [s + '\n' for s in split_text if s != ""]
+    ret = []
+    bs = 0
+    for st in split_text:
+        if(st != ""):
+            enc_str = encode(st.rstrip()) + [1]
+            bs = max(bs, len(enc_str))
+    return bs
+
+
+def encode_string(s, stonum):
+    s = s.rstrip()
+    ss = s.split(" ")
+    encoded_string = [stonum[ch] for ch in ss]
+    return encoded_string
+
+def decode_string(l, numtos):
+    dec = ""
+    for i in l:
+        dec = dec + numtos[i] + " "
+    return dec[:-1]
+
+
+# get all the unique characters that occur in this text
+chars = sorted(list(find_characters(all_data)))
+vocab_size = num_nodes+3
+
+
+# create a mapping from characters to integers
+stoi = {}
+itos = {}
+
+for i in range(num_nodes):
+    stoi[str(i)] = i+3
+    itos[i+3] = str(i)
+
+stoi['[PAD]'] = 0
+itos[0] = '[PAD]'
+stoi['\n'] = 1
+stoi['%'] = 2
+itos[1] = '\n'
+itos[2] = '%'
+
+if shuffled_labels:
+    # Shuffle values while keeping keys the same (except fixed ones)
+    stoi = {str(i): i + 2 for i in range(num_nodes)}
+    stoi['[PAD]'] = 0
+    stoi['\n'] = 1
+
+    # Shuffle values while keeping keys the same (except fixed ones)
+    keys = list(stoi.keys())[:-2]  # Exclude '[PAD]' and '\n'
+    values = list(stoi.values())[:-2]  # Exclude corresponding values
+
+    random.shuffle(values)  # Shuffle values
+
+    # Create shuffled stoi
+    shuffled_stoi = {key: val for key, val in zip(keys, values)}
+    shuffled_stoi['[PAD]'] = 0
+    shuffled_stoi['\n'] = 1
+
+    # Create itos as the inverse of shuffled_stoi
+    shuffled_itos = {v: k for k, v in shuffled_stoi.items()}
+
+    stoi.clear()
+    stoi.update(shuffled_stoi)
+
+    itos.clear()
+    itos.update(shuffled_itos)
+
+for key, value in stoi.items():
+    assert itos[value] == key
+
+
+
+def encode(s):
+    return encode_string(s, stoi) # encoder: take a string, output a list of integers
+def decode(l):
+    return decode_string(l, itos) # decoder: take a list of integers, output a string
+
+# encode both to integers
+block_size = (max(get_block_size(train_data), get_block_size(val_data)) // 32 + 1) * 32
+
+
+train_ids = process_reasoning(train_data)
+
+val_ids = process_reasoning(val_data)
+
+print(f"train has {len(train_ids):,} tokens")
+print(f"val has {len(val_ids):,} tokens")
+
+# export to bin files
+train_ids = np.array(train_ids, dtype=np.uint16)
+val_ids = np.array(val_ids, dtype=np.uint16)
+
+if(args.num_of_paths == 0):
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train.bin'))
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/val.bin'))
+else:
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/train_{args.num_of_paths}.bin'))
+    train_ids.tofile(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_{problem}/val.bin'))
+
+unreachable = False;
+simple_format = True
+if 'x' in chars:
+    unreachable = True
+if ':' in chars:
+    simple_format = False
+
+# save the meta information as well, to help us encode/decode later
+meta = {
+    'unreachable': unreachable,
+    'simple_format': simple_format,
+    'block_size': block_size,
+    'vocab_size': vocab_size,
+    'itos': itos, #if not shuffled_labels else shuffled_itos,
+    'stoi': stoi #if not shuffled_labels else shuffled_stoi,
+}
+print(meta['itos'])
+print(meta['stoi'])
+
+with open(os.path.join(os.path.dirname(__file__), f'{dataset}/{args.num_nodes}_list/meta.pkl'), 'wb') as f:
+    pickle.dump(meta, f)
