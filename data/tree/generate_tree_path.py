@@ -45,29 +45,26 @@ def get_root_to_leaf_paths(G):
 
 
 def create_dataset(G):
-    train_set = []
-    test_set = get_root_to_leaf_paths(G)  # Root-to-leaf paths only in test
+    root_to_leaf_paths = get_root_to_leaf_paths(G)
 
-    edge_counts = {edge: 0 for edge in G.edges()}  # Track occurrences of each edge
-    all_edges = set(G.edges())
+    # Split 50% of paths into training and 50% into testing
+    random.shuffle(root_to_leaf_paths)
+    split_idx = len(root_to_leaf_paths) // 2
+    train_paths = root_to_leaf_paths[:split_idx]
+    test_paths = root_to_leaf_paths[split_idx:]
 
-    while min(edge_counts.values()) < 20:  # Ensure each edge appears at least 20 times
-        path = random.choice(test_set)  # Pick a root-to-leaf path
-        if len(path) > 2:
-            subpath_length = random.randint(2, len(path) - 1)
-        else:
-            subpath_length = 2  # Default to the minimum valid length
+    train_set = set()
+    for path in train_paths:
+        train_set.add(tuple(path))
 
-        subpath_start = random.randint(0, len(path) - subpath_length)
-        subpath = path[subpath_start: subpath_start + subpath_length]
+        # Add all intermediary node paths to training set
+        for i in range(1, len(path)):
+            train_set.add(tuple(path[:i]))  # Root to intermediary
+            train_set.add(tuple(path[i:]))  # Intermediary to leaf
 
-        train_set.append(subpath)
+    test_set = [path for path in test_paths if tuple(path) not in train_set]  # Ensure no train-test leakage
 
-        for i in range(len(subpath) - 1):
-            edge = (subpath[i], subpath[i + 1])
-            edge_counts[edge] += 1
-
-    return train_set, test_set
+    return list(train_set), test_set
 
 
 
