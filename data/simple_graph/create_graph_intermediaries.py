@@ -191,7 +191,7 @@ if __name__ == "__main__":
     TC = nx.transitive_closure(random_digraph)
     reachability, feasible_pairs = obtain_reachability(TC)
 
-    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_path')
+    folder_name = os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_intermediate')
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
