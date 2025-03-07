@@ -16,13 +16,11 @@ def generate_random_rooted_tree(num_nodes):
     leaf_nodes = list(range((num_nodes // 2) + 1, num_nodes))
 
     # Ensure each intermediate node connects to exactly one leaf
-    for i, intermediate in enumerate(intermediate_nodes):
-        if i < len(leaf_nodes):
-            G.add_edge(0, intermediate)  # Connect root to intermediate node
-            G.add_edge(intermediate, leaf_nodes[i])  # Connect intermediate to one unique leaf
+    for intermediate, leaf in zip(intermediate_nodes, leaf_nodes):
+        G.add_edge(0, intermediate)  # Connect root to intermediate node
+        G.add_edge(intermediate, leaf)  # Connect intermediate to one unique leaf
 
     return G
-
 
 def get_root_to_leaf_paths(G):
     roots = [node for node in G.nodes if G.in_degree(node) == 0]
@@ -47,7 +45,15 @@ def get_root_to_leaf_paths(G):
 def create_dataset(G):
     root_to_leaf_paths = get_root_to_leaf_paths(G)
 
-    # Split 50% of paths into training and 50% into testing
+    # Identify distinct intermediate nodes and leaf nodes
+    root = root_to_leaf_paths[0][0]  # Assuming all paths start from the same root
+    leaf_nodes = {path[-1] for path in root_to_leaf_paths}
+    intermediate_nodes = {node for path in root_to_leaf_paths for node in path[1:-1]}  # Exclude root
+
+    # Ensure no overlap between intermediate nodes and leaf nodes
+    assert leaf_nodes.isdisjoint(intermediate_nodes), "Leaf nodes and intermediate nodes must be distinct."
+
+    # Split 50% of root-leaf paths into training and 50% into testing
     random.shuffle(root_to_leaf_paths)
     split_idx = len(root_to_leaf_paths) // 2
     train_paths = root_to_leaf_paths[:split_idx]
@@ -55,12 +61,13 @@ def create_dataset(G):
 
     train_set = set()
     for path in train_paths:
-        train_set.add(tuple(path))
+        train_set.add(tuple(path))  # Add full root-to-leaf path
 
-        # Add all intermediary node paths to training set
-        for i in range(1, len(path)):
-            train_set.add(tuple(path[:i]))  # Root to intermediary
-            train_set.add(tuple(path[i:]))  # Intermediary to leaf
+        # Add root-to-intermediate and intermediate-to-leaf paths
+        for i in range(1, len(path) - 1):
+            if path[i] in intermediate_nodes and path[i] != root:  # Ensure node is an intermediate node and not root
+                train_set.add(tuple(path[:i + 1]))  # Root to intermediate
+                train_set.add(tuple(path[i:]))  # Intermediate to leaf
 
     test_set = [path for path in test_paths if tuple(path) not in train_set]  # Ensure no train-test leakage
 
