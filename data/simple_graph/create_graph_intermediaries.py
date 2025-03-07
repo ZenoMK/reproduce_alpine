@@ -88,9 +88,6 @@ def create_dataset(i):
                         intermediate_node = random.choice(path[1:-1])  # Pick a node that is not source or target
                         train_set.append([source_node, intermediate_node, target_node] + path)
 
-            elif data[source_node][target_node] == -1:
-                test_set.append([source_node, target_node] + random_walk(source_node, target_node))
-
     # Remove edges that are not in any path in the train set
     edges_in_train_set = set()
     for path in train_set:
@@ -99,6 +96,20 @@ def create_dataset(i):
 
     edges_to_remove = [(u, v) for u, v in random_digraph.edges if (u, v) not in edges_in_train_set]
     random_digraph.remove_edges_from(edges_to_remove)
+
+    # Update data matrix and generate test paths
+    for target_node in range(num_nodes):
+        for source_node in range(target_node):
+            if data[source_node][target_node] == -1:
+                if not nx.has_path(random_digraph, source_node, target_node):
+                    data[source_node][target_node] = 0  # No longer reachable, update to 0
+                else:
+                    valid_paths = [path for path in nx.all_simple_paths(random_digraph, source_node, target_node) if
+                                   len(path) >= 3]
+                    if valid_paths:
+                        path = random.choice(valid_paths)  # Randomly sample a path
+                        intermediate_node = random.choice(path[1:-1])  # Pick a node that is not source or target
+                        test_set.append([source_node, intermediate_node, target_node] + path)
 
     return train_set, test_set
 
@@ -204,8 +215,8 @@ if __name__ == "__main__":
     obtain_stats(train_set)
     print('number of source target pairs:', len(test_set))
 
-    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/train_{num_of_paths}.txt'))
-    write_dataset(test_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/test.txt'))
-    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path/path_graph.graphml'))
+    write_dataset(train_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_intermediate/train_{num_of_paths}.txt'))
+    write_dataset(test_set, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_intermediate/test.txt'))
+    nx.write_graphml(random_digraph, os.path.join(os.path.dirname(__file__), f'{num_nodes}_path_intermediate/path_graph.graphml'))
 
 
