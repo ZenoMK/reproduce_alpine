@@ -66,8 +66,8 @@ model.to(device)
 
 tokenizer = tiktoken.get_encoding("gpt2")
 print(type(out_dir))
-# viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir, test_path=f'{data_path}/test.txt', meta_path=meta_path)
-# viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44", problem = "path")
+viz = AttentionVisualizer(model, tokenizer, out_dir = out_dir, test_path=f'{data_path}/test.txt', meta_path=meta_path)
+viz.infer_and_visualize_attention( heads=[0], layers = [0], input_text="21 44 21 23 30 32 44", problem = "path")
 
 
 path_graph = f'{data_path}/path_graph.graphml'
@@ -95,7 +95,8 @@ def decode(l):
 
 
 def check_path(G, gen_str):
-    path = list(map(int, re.findall(r'\d+', gen_str)))
+    path = re.findall(r'\d+', gen_str)
+    print(gen_str)
     if len(path) < 6:
         return 'wrong syntax'
 
@@ -136,7 +137,8 @@ for line in f:
         pos = find_fourth_number_position(line)
         if (line[:pos] != ''):
             texts.append(line[:pos])
-            print(texts)
+            #print(line)
+            #print(line[:pos])
             encode_texts.append(encode(line[:pos]))
 
     ground_truth.append(line)
@@ -157,7 +159,6 @@ intermed_wrong = 0
 for i in tqdm(range(10)):
     x = encode_texts[ix]
     x_gt = ground_truth[ix]
-
     # x = (torch.tensor(text, dtype=torch.long, device=device))
     y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
 
